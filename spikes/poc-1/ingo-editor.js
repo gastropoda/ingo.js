@@ -29,12 +29,14 @@
     var letters = "ABCDEFGHJKLMNOPQRST";
     var points = [ "D4", "D10", "D16", "K4", "K10", "K16", "Q4", "Q10", "Q16" ];
     function drawLines() {
-      for(x=board.left; x<board.width; x+=board.xStep) {
-        var line = paper.Path.Line([x,board.top], [x,board.bottom]);
+      for(var i = 0; i<19; i++) {
+        var x = board.left + i * board.xStep;
+        var line = paper.Path.Line([x, board.top], [x, board.bottom]);
         line.strokeColor = "black";
       }
-      for(y=board.top; y<board.height; y+=board.yStep) {
-        var line = paper.Path.Line([board.left,y], [board.right,y]);
+      for(var j = 0; j<19; j++) {
+        var y = board.top + j * board.yStep;
+        var line = paper.Path.Line([board.left, y], [board.right, y]);
         line.strokeColor = "black";
       }
     }
@@ -56,21 +58,62 @@
     function indexToCoords(index) {
       return [board.left + index[0]*board.xStep, board.bottom - index[1]*board.yStep];
     }
+    function drawCoordinates() {
+      var fontSize = board.yStep * 0.4 + "px";
+      for(var i in letters) {
+        var letter = letters[i];
+        var x = board.left + i * board.xStep, y = board.height;
+        new paper.PointText({
+          point: [x,y],
+          content: letter,
+          fillColor: "black",
+          fontSize: fontSize,
+          justification: "center",
+        });
+        y = board.top - 3;
+        new paper.PointText({
+          point: [x,y],
+          content: letter,
+          fillColor: "black",
+          fontSize: fontSize,
+          justification: "center",
+        });
+      }
+      for(var j = 0; j < 19; j++) {
+        var coord = j+1;
+        var x = board.left - 3, y = board.bottom - j * board.yStep + 0.15 * board.yStep;
+        new paper.PointText({
+          point: [x,y],
+          content: coord,
+          fillColor: "black",
+          fontSize: fontSize,
+          justification: "right",
+        });
+        x = board.right + 3;
+        new paper.PointText({
+          point: [x,y],
+          content: coord,
+          fillColor: "black",
+          fontSize: fontSize,
+          justification: "left",
+        });
+      }
+    }
     return {
       setup: function(_w,_h) {
         board.width = _w;
         board.height = _h;
-        board.xStep = board.width/19;
-        board.yStep = board.height/19;
-        board.left = board.xStep/2;
-        board.right = board.width-board.xStep/2;
-        board.top = board.yStep/2;
-        board.bottom = board.height-board.yStep/2;
+        board.xStep = board.yStep = Math.min(board.width/19, board.height/19);
+        board.left = (board.width - 18 * board.xStep) / 2;
+        board.right = board.width - board.left;
+        board.top =  (board.height - 18 * board.yStep) / 2;
+        board.bottom = board.height - board.top;
         board.pointRadius = board.xStep * 0.12;
       },
       drawBoard: function() {
         drawLines();
         drawPoints();
+        drawCoordinates();
       },
     };
   }]);
