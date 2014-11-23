@@ -17,37 +17,61 @@
       link: function postLink(scope, iElement, iAttrs) {
         var canvas = iElement[0];
         paper.setup(canvas);
-        var w = paper.view.viewSize.width, h = paper.view.viewSize.height;
-        painter.setup(w,h);
-        painter.drawLines();
+        painter.setup(paper.view.viewSize.width, paper.view.viewSize.height);
+        painter.drawBoard();
         paper.view.draw();
       }
     };
   }]);
   app.factory("paper", function() { return window.paper; });
   app.factory("boardPainter", ["paper", function(paper) {
-    var w,h,dw,dh,l,r,b,t;
+    var board = {};
+    var letters = "ABCDEFGHJKLMNOPQRST";
+    var points = [ "D4", "D10", "D16", "K4", "K10", "K16", "Q4", "Q10", "Q16" ];
+    function drawLines() {
+      for(x=board.left; x<board.width; x+=board.xStep) {
+        var line = paper.Path.Line([x,board.top], [x,board.bottom]);
+        line.strokeColor = "black";
+      }
+      for(y=board.top; y<board.height; y+=board.yStep) {
+        var line = paper.Path.Line([board.left,y], [board.right,y]);
+        line.strokeColor = "black";
+      }
+    }
+    function drawPoints() {
+      for(var i in points) {
+        var pointPosition = points[i];
+        var pointIndex = positionToIndex(pointPosition);
+        var pointCoords = indexToCoords(pointIndex);
+        var circle = paper.Path.Circle(pointCoords, board.pointRadius);
+        circle.fillColor = "black";
+        circle.strokeColor = "black";
+      }
+    }
+    function positionToIndex(position) {
+      var i = letters.indexOf(position[0]);
+      var j = position.slice(1) - 1;
+      return [i,j];
+    }
+    function indexToCoords(index) {
+      return [board.left + index[0]*board.xStep, board.bottom - index[1]*board.yStep];
+    }
     return {
       setup: function(_w,_h) {
-        w = _w;
-        h = _h;
-        dw = w/19;
-        dh = h/19;
-        l = dw/2;
-        r = w-dw/2;
-        b = dh/2;
-        t = h-dh/2;
+        board.width = _w;
+        board.height = _h;
+        board.xStep = board.width/19;
+        board.yStep = board.height/19;
+        board.left = board.xStep/2;
+        board.right = board.width-board.xStep/2;
+        board.top = board.yStep/2;
+        board.bottom = board.height-board.yStep/2;
+        board.pointRadius = board.xStep * 0.12;
       },
-      drawLines: function() {
-        for(x=l; x<w; x+=dw) {
-          var line = paper.Path.Line([x,b], [x,t]);
-          line.strokeColor = "black";
-        }
-        for(y=b; y<h; y+=dh) {
-          var line = paper.Path.Line([l,y], [r,y]);
-          line.strokeColor = "black";
-        }
-      }
+      drawBoard: function() {
+        drawLines();
+        drawPoints();
+      },
     };
   }]);
 })();
