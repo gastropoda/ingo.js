@@ -17,11 +17,17 @@
       link: function postLink(scope, iElement, iAttrs) {
         var canvas = iElement[0];
         paper.setup(canvas);
-        paper.Path.Rectangle({
-          point: [0,0],
-          size: paper.view.viewSize,
-          strokeColor: "black"
-        });
+        var w = paper.view.viewSize.width, h = paper.view.viewSize.height;
+        var dw = w/19, dh = h/19;
+        var l = dw/2, r = w-dw/2, b = dh/2, t = h-dh/2;
+        for(x=l; x<w; x+=dw) {
+          var line = paper.Path.Line([x,b], [x,t]);
+          line.strokeColor = "black";
+        }
+        for(y=b; y<h; y+=dh) {
+          var line = paper.Path.Line([l,y], [r,y]);
+          line.strokeColor = "black";
+        }
         paper.view.draw();
       }
     };
