@@ -1,6 +1,7 @@
 (function() {
-  var goBoardModule = angular.module("go-board", []);
-  goBoardModule.directive("goBoard", ["paper", "boardPainter", function(paper, painter) {
+  angular
+  .module("go-board", [])
+  .directive("goBoard", ["paper", "boardPainter", function(paper, painter) {
     return {
       link: function postLink($scope, iElement, iAttrs) {
         var canvas = iElement[0];
@@ -12,9 +13,9 @@
         paper.view.draw();
       }
     };
-  }]);
-  goBoardModule.factory("paper", function() { return window.paper; });
-  goBoardModule.factory("boardPainter", ["paper", function(paper) {
+  }])
+  .factory("paper", function() { return window.paper; })
+  .factory("boardPainter", ["paper", function(paper) {
     var board = {};
     var letters = "ABCDEFGHJKLMNOPQRST";
     var points = [ "D4", "D10", "D16", "K4", "K10", "K16", "Q4", "Q10", "Q16" ];
