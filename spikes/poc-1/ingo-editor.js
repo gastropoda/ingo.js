@@ -116,11 +116,21 @@
       shape.strokeColor = "black";
       shape.strokeWidth = 2;
       symbols.whiteStone = new paper.Symbol(shape);
+      shape = new paper.Path.RegularPolygon([0,0], 3, board.symbolRadius);
+      shape.strokeColor = "black";
+      shape.fillColor = "black";
+      symbols.triangle = new paper.Symbol(shape);
     }
     function drawStone(stone) {
       var symbol = symbols[ stone.color + "Stone" ];
       var coords = positionToCoords(stone.position);
       symbol.place(coords);
+    }
+    function drawMark(mark) {
+      var symbol = symbols[ mark.type ];
+      var coords = positionToCoords(mark.position);
+      symbol.place(coords);
+      console.log(mark,symbol,coords);
     }
     return {
       setup: function(_w,_h) {
@@ -133,6 +143,7 @@
         board.bottom = board.height - board.top;
         board.pointRadius = board.xStep * 0.12;
         board.stoneRadius = board.xStep * 0.45;
+        board.symbolRadius = board.xStep * 0.25;
         createSymbols();
       },
       drawBoard: function() {
@@ -144,6 +155,7 @@
         stones.map(drawStone);
       },
       drawMarks: function(marks) {
+        marks.map(drawMark);
       },
     };
   }]);
