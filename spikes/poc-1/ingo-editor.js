@@ -1,24 +1,26 @@
 (function() {
   var app = angular.module("ingo-editor", []);
-  app.controller("BoardController", function() {
-    this.stones = [
+  app.controller("BoardController", ["$scope", function($scope) {
+    $scope.stones = [
       {color: "black", position: "C2"},
       {color: "black", position: "C3"},
       {color: "white", position: "D1"},
       {color: "white", position: "E1"},
     ];
-    this.symbols = [
+    $scope.marks = [
       {type: "triangle", position: "D1"},
       {type: "triangle", position: "E1"},
     ];
-  });
+  }]);
   app.directive("goBoard", ["paper", "boardPainter", function(paper, painter) {
     return {
-      link: function postLink(scope, iElement, iAttrs) {
+      link: function postLink($scope, iElement, iAttrs) {
         var canvas = iElement[0];
         paper.setup(canvas);
         painter.setup(paper.view.viewSize.width, paper.view.viewSize.height);
         painter.drawBoard();
+        painter.drawStones($scope.stones);
+        painter.drawMarks($scope.marks);
         paper.view.draw();
       }
     };
@@ -28,6 +30,7 @@
     var board = {};
     var letters = "ABCDEFGHJKLMNOPQRST";
     var points = [ "D4", "D10", "D16", "K4", "K10", "K16", "Q4", "Q10", "Q16" ];
+    var symbols = {};
     function drawLines() {
       for(var i = 0; i<19; i++) {
         var x = board.left + i * board.xStep;
@@ -57,6 +60,9 @@
     }
     function indexToCoords(index) {
       return [board.left + index[0]*board.xStep, board.bottom - index[1]*board.yStep];
+    }
+    function positionToCoords(position) {
+      return indexToCoords(positionToIndex(position));
     }
     function drawCoordinates() {
       var fontSize = board.yStep * 0.4 + "px";
@@ -99,6 +105,23 @@
         });
       }
     }
+    function createSymbols() {
+      var shape = new paper.Path.Circle([0,0],board.stoneRadius);
+      shape.fillColor = "black";
+      shape.strokeColor = "white";
+      shape.strokeWidth = 2;
+      symbols.blackStone = new paper.Symbol(shape);
+      shape = new paper.Path.Circle([0,0],board.stoneRadius);
+      shape.fillColor = "white";
+      shape.strokeColor = "black";
+      shape.strokeWidth = 2;
+      symbols.whiteStone = new paper.Symbol(shape);
+    }
+    function drawStone(stone) {
+      var symbol = symbols[ stone.color + "Stone" ];
+      var coords = positionToCoords(stone.position);
+      symbol.place(coords);
+    }
     return {
       setup: function(_w,_h) {
         board.width = _w;
@@ -109,11 +132,18 @@
         board.top =  (board.height - 18 * board.yStep) / 2;
         board.bottom = board.height - board.top;
         board.pointRadius = board.xStep * 0.12;
+        board.stoneRadius = board.xStep * 0.45;
+        createSymbols();
       },
       drawBoard: function() {
         drawLines();
         drawPoints();
         drawCoordinates();
+      },
+      drawStones: function(stones) {
+        stones.map(drawStone);
+      },
+      drawMarks: function(marks) {
       },
     };
   }]);
