@@ -1,0 +1,23 @@
+{
+  "name": "ingo.js",
+  "version": "0.0.2",
+  "authors": [
+    "Artem Baguinski <abaguinski@gmail.com>"
+  ],
+  "description": "go editor",
+  "main": "index.html",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "go"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
