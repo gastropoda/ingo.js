@@ -15,3 +15,20 @@ Bring together the framework, drawing library and initial understanding of what 
 ### 2. SGF browser
 
 Load SGF and browse it
+
+To get going:
+
+```
+# install browser dependencies
+bower install
+
+# install console dependencies
+npm install
+
+# start development server
+npm start
+```
+
+... then browse to http://localhost:8000/
+
+Serving over http is necessary for loading of the game files with AJAX from "the server".
