@@ -1,6 +1,6 @@
 (function() {
   angular
-  .module("go-board", [])
+  .module("goBoard", [])
   .directive("goBoard", ["paper", "boardPainter", function(paper, painter) {
     return {
       link: function postLink($scope, iElement, iAttrs) {

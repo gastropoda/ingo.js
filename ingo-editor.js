@@ -1,6 +1,6 @@
 (function() {
   angular
-  .module("ingo-editor", ["go-board", "smartGame"])
+  .module("ingoEditor", ["goBoard", "smartGame"])
   .controller("BoardController", ["$scope", "$http", "SGF", function($scope, $http, SGF) {
     $scope.stones = [
       {color: "black", position: "C2"},
