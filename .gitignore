@@ -1,5 +1,4 @@
-/bower_components
+/app/bower_components
 /node_modules
-/smart-game.js
-/npm-debug.log
+smart-game.js
 __go4go*.sgf
