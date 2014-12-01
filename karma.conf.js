@@ -4,6 +4,7 @@ module.exports = function(config){
     frameworks: ["mocha", "sinon-chai"],
     files : [
       "app/bower_components/angular/angular.js",
+      "app/bower_components/angular-mocks/angular-mocks.js",
       "app/js/**/*.js",
       "spec/**/*_spec.js",
     ],
