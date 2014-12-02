@@ -68,4 +68,15 @@ describe("GoGameTree", function() {
       expect(tree.children()).to.eq("_children_");
     });
   });
+
+  describe("#move()", function() {
+    it("defaults to falsey", function() {
+      expect(emptyTree().move()).to.be.falsey;
+    });
+
+    it("is initialized with constructor option", function() {
+      var tree = new GoGameTree({move: "_move_"});
+      expect(tree.move()).to.eq("_move_");
+    });
+  });
 });
