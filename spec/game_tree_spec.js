@@ -6,16 +6,15 @@ describe("GoGameTree", function() {
     GoGameTree = _GoGameTree_;
   }));
 
+  function emptyTree() {
+    return new GoGameTree();
+  }
+
   it("is a constructor", function() {
-    var tree = new GoGameTree();
-    expect(tree).to.be.instanceOf(GoGameTree);
+    expect(emptyTree()).to.be.instanceOf(GoGameTree);
   });
 
   describe("constructor options", function() {
-    function emptyTree() {
-      return new GoGameTree();
-    }
-
     describe("parent", function() {
       it("sets parent attribute", function() {
         var tree = new GoGameTree({parent: "_parent_"});
@@ -38,6 +37,17 @@ describe("GoGameTree", function() {
       })
     });
 
+    describe("turnNumber", function() {
+      it("sets turnNumber attribute", function() {
+        var tree = new GoGameTree({turnNumber: "_turnNumber_"});
+        expect(tree.turnNumber()).to.eq("_turnNumber_");
+      });
+
+      it("defaults to falsey", function() {
+        expect(emptyTree().turnNumber()).to.be.falsey;
+      })
+    });
+
     describe("children", function() {
       it("sets children attribute", function() {
         var tree = new GoGameTree({children: "_children_"});
@@ -47,6 +57,16 @@ describe("GoGameTree", function() {
       it("defaults to empty array", function() {
         expect(emptyTree().children()).to.be.empty;
       })
+    });
+  });
+
+  describe( "turnNumber" , function() {
+    context( "with parent", function() {
+      it( "is one more than parent's" , function() {
+        var parent = new GoGameTree({turnNumber: 1});
+        var tree = new GoGameTree({parent: parent});
+        expect(tree.turnNumber()).to.eq(2);
+      });
     });
   });
 });
