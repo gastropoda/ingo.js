@@ -11,21 +11,42 @@ describe("GoGameTree", function() {
     expect(tree).to.be.instanceOf(GoGameTree);
   });
 
-  describe("fresh instance", function() {
-    beforeEach(function() {
-      this.tree = new GoGameTree();
+  describe("constructor options", function() {
+    function emptyTree() {
+      return new GoGameTree();
+    }
+
+    describe("parent", function() {
+      it("sets parent attribute", function() {
+        var tree = new GoGameTree({parent: "_parent_"});
+        expect(tree.parent()).to.eq("_parent_");
+      });
+
+      it("defaults to falsey", function() {
+        expect(emptyTree().parent()).to.be.falsey;
+      })
     });
 
-    it("has no parent", function() {
-      expect(this.tree.parent()).to.be.null;
+    describe("state", function() {
+      it("sets state attribute", function() {
+        var tree = new GoGameTree({state: "_state_"});
+        expect(tree.state()).to.eq("_state_");
+      });
+
+      it("defaults to falsey", function() {
+        expect(emptyTree().state()).to.be.falsey;
+      })
     });
 
-    it("has no state", function() {
-      expect(this.tree.state()).to.be.null;
-    });
+    describe("children", function() {
+      it("sets children attribute", function() {
+        var tree = new GoGameTree({children: "_children_"});
+        expect(tree.children()).to.eq("_children_");
+      });
 
-    it("has no children", function() {
-      expect(this.tree.children()).to.be.empty;
+      it("defaults to empty array", function() {
+        expect(emptyTree().children()).to.be.empty;
+      })
     });
   });
 });
