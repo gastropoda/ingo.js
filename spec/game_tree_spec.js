@@ -87,6 +87,12 @@ describe("GoGameTree", function() {
       expect(child.parent()).to.eq(thisTree);
     });
 
+    it("sets child's turnNumber to one more the this tree's", function() {
+      var thisTree = new GoGameTree({turnNumber: 41});
+      var child = thisTree.addChild();
+      expect(child.turnNumber()).to.eq(42);
+    });
+
     context("given 'move' option", function() {
       var derivedState = { };
       var initialState = { deriveState: sinon.stub().returns(derivedState) };
@@ -106,4 +112,7 @@ describe("GoGameTree", function() {
       });
     });
   });
+
+  describe("#findChild()", function() {});
+  describe("#findOrAddChild()", function() {});
 });
