@@ -17,7 +17,6 @@
       if (isNaN(this._turnNumber) && this._parent && !isNaN(this.parent().turnNumber())) {
         this._turnNumber = this.parent().turnNumber() + 1;
       }
-
     };
   });
 })();
