@@ -15,6 +15,13 @@
       this.children = function() { return this._children; }
       this.turnNumber = function() { return this._turnNumber; }
       this.move = function() { return this._move; }
+      this.addChild = function(options) {
+        options = options || {};
+        if (options.move) {
+          var newState = this.state().deriveState(options.move);
+        }
+        return new GoGameTree({parent: this, state: newState});
+      }
 
       if (isNaN(this._turnNumber) && this._parent && !isNaN(this.parent().turnNumber())) {
         this._turnNumber = this.parent().turnNumber() + 1;
