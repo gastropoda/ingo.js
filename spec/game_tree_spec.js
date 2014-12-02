@@ -87,12 +87,23 @@ describe("GoGameTree", function() {
       expect(child.parent()).to.eq(thisTree);
     });
 
-    it( "derives new state using move" , function() {
+    context("given 'move' option", function() {
       var derivedState = { };
       var initialState = { deriveState: sinon.stub().returns(derivedState) };
-      var thisTree = new GoGameTree({state: initialState});
-      var child = thisTree.addChild({move: "_move_"});
-      expect(child.state()).to.eq(derivedState);
+      var thisTree, child;
+
+      beforeEach(function() {
+        thisTree = new GoGameTree({state: initialState});
+        child = thisTree.addChild({move: "_move_"});
+      });
+
+      it( "sets child's move to it" , function() {
+        expect(child.move()).to.eq("_move_");
+      });
+
+      it( "derives new state using move" , function() {
+        expect(child.state()).to.eq(derivedState);
+      });
     });
   });
 });

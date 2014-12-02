@@ -20,7 +20,7 @@
         if (options.move) {
           var newState = this.state().deriveState(options.move);
         }
-        return new GoGameTree({parent: this, state: newState});
+        return new GoGameTree({parent: this, state: newState, move: options.move});
       }
 
       if (isNaN(this._turnNumber) && this._parent && !isNaN(this.parent().turnNumber())) {
