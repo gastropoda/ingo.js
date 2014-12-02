@@ -14,7 +14,7 @@
       this.children = function() { return this._children; }
       this.turnNumber = function() { return this._turnNumber; }
 
-      if (isNaN(this.turnNumber()) && this.parent() && this.parent().turnNumber && !isNaN(this.parent().turnNumber())) {
+      if (isNaN(this._turnNumber) && this._parent && !isNaN(this.parent().turnNumber())) {
         this._turnNumber = this.parent().turnNumber() + 1;
       }
 

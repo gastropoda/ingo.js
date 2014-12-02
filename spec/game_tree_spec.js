@@ -17,8 +17,9 @@ describe("GoGameTree", function() {
   describe("constructor options", function() {
     describe("parent", function() {
       it("sets parent attribute", function() {
-        var tree = new GoGameTree({parent: "_parent_"});
-        expect(tree.parent()).to.eq("_parent_");
+        var parent = { turnNumber: sinon.stub() };
+        var tree = new GoGameTree({parent: parent});
+        expect(tree.parent()).to.eq(parent);
       });
 
       it("defaults to falsey", function() {
@@ -63,7 +64,7 @@ describe("GoGameTree", function() {
   describe( "turnNumber" , function() {
     context( "with parent", function() {
       it( "is one more than parent's" , function() {
-        var parent = new GoGameTree({turnNumber: 1});
+        var parent = { turnNumber: sinon.stub().returns(1) };
         var tree = new GoGameTree({parent: parent});
         expect(tree.turnNumber()).to.eq(2);
       });
