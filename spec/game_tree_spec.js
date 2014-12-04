@@ -81,13 +81,19 @@ describe("GoGameTree", function() {
   });
 
   describe("#addChild()", function() {
+    it("add child to tree's children", function() {
+      var thisTree = new GoGameTree();
+      var child = thisTree.addChild();
+      expect(thisTree.children()).to.contain(child);
+    });
+
     it("sets child's parent to this tree", function() {
       var thisTree = new GoGameTree();
       var child = thisTree.addChild();
       expect(child.parent()).to.eq(thisTree);
     });
 
-    it("sets child's turnNumber to one more the this tree's", function() {
+    it("sets child's turnNumber to one more than this tree's", function() {
       var thisTree = new GoGameTree({turnNumber: 41});
       var child = thisTree.addChild();
       expect(child.turnNumber()).to.eq(42);
@@ -113,6 +119,29 @@ describe("GoGameTree", function() {
     });
   });
 
-  describe("#findChild()", function() {});
+  describe("#findChild()", function() {
+    var thisTree, child, otherChild;
+    var initialState = { deriveState: sinon.stub() };
+
+    beforeEach(function() {
+      thisTree = new GoGameTree({state: initialState});
+      child = thisTree.addChild({move: "_move_"});
+      otherChild = thisTree.addChild({move: "_other_move_"});
+    });
+
+    context("a child with given move exists", function() {
+      it("returns the child", function() {
+        expect(thisTree.findChild("_move_")).to.eq(child);
+        expect(thisTree.findChild("_other_move_")).to.eq(otherChild);
+      });
+    });
+
+    context("no child with given move exists", function() {
+      it("returns falsey", function() {
+        expect(thisTree.findChild("_no_such_move_")).to.be.falsey;
+      });
+    });
+  });
+
   describe("#findOrAddChild()", function() {});
 });
