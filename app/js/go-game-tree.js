@@ -20,7 +20,11 @@
         if (options.move) {
           var newState = this.state().deriveState(options.move);
         }
-        var child = new GoGameTree({parent: this, state: newState, move: options.move});
+        var child = new GoGameTree({
+          parent: this,
+          state: newState,
+          move: options.move
+        });
         this._children.push(child);
         return child;
       }
@@ -34,10 +38,13 @@
         }
       }
       this.findOrAddChild = function(move) {
-        return this.findChild(move) || this.addChild({move: move});
+        return this.findChild(move) ||
+          this.addChild({move: move});
       }
 
-      if (isNaN(this._turnNumber) && this._parent && !isNaN(this.parent().turnNumber())) {
+      if (isNaN(this._turnNumber)
+          && this._parent
+          && !isNaN(this.parent().turnNumber())) {
         this._turnNumber = this.parent().turnNumber() + 1;
       }
     };
