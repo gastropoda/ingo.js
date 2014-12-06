@@ -143,5 +143,28 @@ describe("GoGameTree", function() {
     });
   });
 
-  describe("#findOrAddChild()", function() {});
+  describe("#findOrAddChild()", function() {
+    var thisTree, child, otherChild;
+    var initialState = { deriveState: sinon.stub() };
+
+    beforeEach(function() {
+      thisTree = new GoGameTree({state: initialState});
+      child = thisTree.addChild({move: "_move_"});
+      otherChild = thisTree.addChild({move: "_other_move_"});
+    });
+
+    context("a child with given move exists", function() {
+      it("returns the child", function() {
+        expect(thisTree.findOrAddChild("_move_")).to.eq(child);
+        expect(thisTree.findOrAddChild("_other_move_")).to.eq(otherChild);
+      });
+    });
+
+    context("no child with given move exists", function() {
+      it("adds a new child", function() {
+        var result = thisTree.findOrAddChild("_no_such_move_");
+        expect(result).to.be.instanceof(GoGameTree);
+      });
+    });
+  });
 });
