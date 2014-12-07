@@ -58,11 +58,16 @@
   .factory("GoGameState", function() {
     function GoGameState(options) {
       options = options || {};
-      this.boardStones = {};
-      placeStones(this.boardStones,
+      this._boardStones = {};
+      this._captures = {};
+      var captures = options.captures || {}
+      this._captures.white = captures.white || 0;
+      this._captures.black = captures.black || 0;
+
+      placeStones(this._boardStones,
                   GoGameState.WhiteStone,
                   options.white || "");
-      placeStones(this.boardStones,
+      placeStones(this._boardStones,
                   GoGameState.BlackStone,
                   options.black || "");
     }
@@ -72,7 +77,11 @@
 
     GoGameState.prototype = {
       at: function(position) {
-        return this.boardStones[position];
+        return this._boardStones[position];
+      },
+
+      captures: function(color) {
+        return this._captures[color];
       }
     };
 

@@ -48,4 +48,30 @@ describe( "GoGameState" , function() {
     });
 
   });
+
+  describe( "#captures()" , function() {
+    var state;
+
+    beforeEach(function() {
+      state = new GoGameState({
+        captures: {
+          white: 5,
+          black: 10,
+        }
+      });
+    });
+
+    it("defaults to 0", function() {
+      expect(emptyState().captures("white")).to.eq(0);
+      expect(emptyState().captures("black")).to.eq(0);
+    });
+
+    it("reports white captures", function() {
+      expect(state.captures("white")).to.eq(5);
+    });
+
+    it("reports white captures", function() {
+      expect(state.captures("black")).to.eq(10);
+    });
+  });
 });
