@@ -16,7 +16,7 @@ describe("GoGameTree", function() {
 
   describe("#parent()", function() {
     it("defaults to falsey", function() {
-      expect(emptyTree().parent()).to.be.falsey;
+      expect(emptyTree().parent()).to.be.notOk;
     });
 
     it("is initialized with constructor option", function() {
@@ -28,7 +28,7 @@ describe("GoGameTree", function() {
 
   describe("#state()", function() {
     it("defaults to falsey", function() {
-      expect(emptyTree().state()).to.be.falsey;
+      expect(emptyTree().state()).to.be.notOk;
     });
 
     it("is initialized with constructor option", function() {
@@ -40,7 +40,7 @@ describe("GoGameTree", function() {
   describe("#turnNumber()", function() {
     context("without parent", function() {
       it("defaults to falsey", function() {
-        expect(emptyTree().turnNumber()).to.be.falsey;
+        expect(emptyTree().turnNumber()).to.be.notOk;
       });
     });
 
@@ -71,7 +71,7 @@ describe("GoGameTree", function() {
 
   describe("#move()", function() {
     it("defaults to falsey", function() {
-      expect(emptyTree().move()).to.be.falsey;
+      expect(emptyTree().move()).to.be.notOk;
     });
 
     it("is initialized with constructor option", function() {
@@ -138,7 +138,7 @@ describe("GoGameTree", function() {
 
     context("no child with given move exists", function() {
       it("returns falsey", function() {
-        expect(thisTree.findChild("_no_such_move_")).to.be.falsey;
+        expect(thisTree.findChild("_no_such_move_")).to.be.notOk;
       });
     });
   });
