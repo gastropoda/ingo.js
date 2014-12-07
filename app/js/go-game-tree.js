@@ -56,27 +56,15 @@
     return GoGameTree;
   })
   .factory("GoGameState", function() {
-    function scanBoardPositions(positions) {
-      return positions.split(/\W+/);
-    }
-
     function GoGameState(options) {
-      this.boardStones = {};
       options = options || {};
-
-      var stones = options.white || "";
-      stones = scanBoardPositions(stones);
-      for(var i in stones) {
-        var position = stones[i];
-        this.boardStones[position] = GoGameState.WhiteStone;
-      }
-
-      stones = options.black || "";
-      stones = scanBoardPositions(stones);
-      for(var i in stones) {
-        var position = stones[i];
-        this.boardStones[position] = GoGameState.BlackStone;
-      }
+      this.boardStones = {};
+      placeStones(this.boardStones,
+                  GoGameState.WhiteStone,
+                  options.white || "");
+      placeStones(this.boardStones,
+                  GoGameState.BlackStone,
+                  options.black || "");
     }
 
     GoGameState.WhiteStone = "white";
@@ -89,5 +77,17 @@
     };
 
     return GoGameState;
+
+    function scanBoardPositions(positions) {
+      return positions.split(/\W+/);
+    }
+
+    function placeStones(board, color, positions) {
+      positions = scanBoardPositions(positions);
+      for(var i in positions) {
+        var position = positions[i];
+        board[position] = color;
+      }
+    }
   });
 })();
