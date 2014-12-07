@@ -31,11 +31,11 @@ describe( "GoGameState" , function() {
     });
 
     it("defaults to falsey", function() {
-      expect(emptyState().at("a1")).not.to.be.ok;
+      expect(emptyState().at("a1")).to.not.exist;
     });
 
     it("is falsy for empty positions", function() {
-      expect(state.at("z19")).to.be.notOk;
+      expect(state.at("z19")).to.not.exist;
     });
 
     it("returns GoGameState.WhiteStone for white stone positions", function() {
