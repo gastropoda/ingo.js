@@ -75,12 +75,65 @@ describe( "GoGameState" , function() {
     });
   });
 
-  describe( "#isLegalMove()" , function() {
-    it("determines if a move is legal");
+  describe("#nextTurnColor()", function() {
+    it("defaults to black", function() {
+      expect(emptyState().nextTurnColor()).to.eq("black");
+    });
+
+    it("is initialized with constructor option", function() {
+      var state = new GoGameState({nextTurnColor: "white"});
+      expect(state.nextTurnColor()).to.eq("white");
+    });
+
+    context("given an argument", function() {
+      it("compares it to the attribute", function() {
+        var state = new GoGameState({nextTurnColor: "white"});
+        expect(state.nextTurnColor("white")).to.be.ok;
+        expect(state.nextTurnColor("black")).to.not.be.ok;
+
+        var state = new GoGameState({nextTurnColor: "black"});
+        expect(state.nextTurnColor("black")).to.be.ok;
+        expect(state.nextTurnColor("white")).to.not.be.ok;
+      });
+    });
   });
+
+  describe( "#isLegalMove()" , function() {
+    it("isn't if position is occupied", function() {
+      var state = new GoGameState({white: "a1"});
+      expect(state.isLegalMove({black: "a1"})).to.not.be.ok;
+    });
+
+    context("white's turn", function() {
+      it("is false for black", function() {
+        var state = new GoGameState({nextTurnColor: "white"});
+        expect(state.isLegalMove({black: "a1"})).to.not.be.ok;
+      });
+    });
+
+    context("black's turn", function() {
+      it("is false for white", function() {
+        var state = new GoGameState({nextTurnColor: "black"});
+        expect(state.isLegalMove({white: "a1"})).to.not.be.ok;
+      });
+    });
+
+    it("isn't if both colors are present", function() {
+      expect(emptyState().isLegalMove({white: "a1", black: "b2"})).to.not.be.ok;
+    });
+
+    it("isn't if no color is present", function() {
+      expect(emptyState().isLegalMove({})).to.not.be.ok;
+    });
+
+    it("isn't if move is a suicide");
+    it("isn't if move is illegal ko");
+  });
+
   describe( "#derive()" , function() {
     it("derives new position");
   });
+
   describe( "#boardStones()" , function() {
     it("lists board stones");
   });

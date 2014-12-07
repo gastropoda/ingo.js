@@ -63,6 +63,7 @@
       var captures = options.captures || {}
       this._captures.white = captures.white || 0;
       this._captures.black = captures.black || 0;
+      this._nextTurnColor = options.nextTurnColor || "black";
       placeStones(this._boardStones,
                   GoGameState.WhiteStone,
                   options.white || "");
@@ -84,7 +85,11 @@
       },
 
       isLegalMove: function(move) {
-        return true;
+        var moveColor = move.white ? "white" : "black";
+        var movePosition = move.white || move.black;
+        var freePlace = !this.at(movePosition);
+        if (move.white && move.black || !movePosition) return false;
+        return !!(this.nextTurnColor(moveColor) && freePlace);
       },
 
       derive: function(move) {
@@ -94,6 +99,14 @@
       boardStones: function() {
         return [];
       },
+
+      nextTurnColor: function(color) {
+        if (color === undefined) {
+          return this._nextTurnColor;
+        } else {
+          return this._nextTurnColor === color;
+        }
+      }
     };
 
     return GoGameState;
