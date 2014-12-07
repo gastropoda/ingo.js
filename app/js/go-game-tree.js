@@ -54,6 +54,11 @@
     }
 
     return GoGameTree;
+  })
+  .factory("GoGameState", function() {
+    function GoGameState() {
+    }
+
+    return GoGameState;
   });
 })();
-
