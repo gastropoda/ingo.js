@@ -56,8 +56,33 @@
     return GoGameTree;
   })
   .factory("GoGameState", function() {
-    function GoGameState() {
+    function GoGameState(options) {
+      this.boardStones = {};
+      options = options || {};
+
+      var stones = options.white || "";
+      stones = stones.split(/\W+/);
+      for(var i in stones) {
+        var position = stones[i];
+        this.boardStones[position] = GoGameState.WhiteStone;
+      }
+
+      stones = options.black || "";
+      stones = stones.split(/\W+/);
+      for(var i in stones) {
+        var position = stones[i];
+        this.boardStones[position] = GoGameState.BlackStone;
+      }
     }
+
+    GoGameState.WhiteStone = "white";
+    GoGameState.BlackStone = "black";
+
+    GoGameState.prototype = {
+      at: function(position) {
+        return this.boardStones[position];
+      }
+    };
 
     return GoGameState;
   });
