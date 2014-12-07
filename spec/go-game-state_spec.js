@@ -70,7 +70,7 @@ describe( "GoGameState" , function() {
       expect(state.captures("white")).to.eq(5);
     });
 
-    it("reports white captures", function() {
+    it("reports black captures", function() {
       expect(state.captures("black")).to.eq(10);
     });
   });
