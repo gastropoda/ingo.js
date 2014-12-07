@@ -1,16 +1,18 @@
 describe("GoGameTree", function() {
-  var GoGameTree;
+  var GoGameTree, GoGameState;
   beforeEach(module("goGameTree"));
-  beforeEach(inject(function(_GoGameTree_) {
+  beforeEach(inject(function(_GoGameTree_, _GoGameState_) {
     GoGameTree = _GoGameTree_;
+    GoGameState = _GoGameState_;
   }));
 
   var emptyTree, thisTree, child, otherChild;
   var initialState, derivedState;
   beforeEach(function() {
     emptyTree = new GoGameTree();
-    derivedState = {};
-    initialState = { deriveState: sinon.stub().returns(derivedState) };
+    derivedState = sinon.createStubInstance(GoGameState);
+    initialState = sinon.createStubInstance(GoGameState);
+    initialState.deriveState.returns(derivedState);
   });
 
   it("is a constructor", function() {
