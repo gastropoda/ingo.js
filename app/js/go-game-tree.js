@@ -56,19 +56,23 @@
     return GoGameTree;
   })
   .factory("GoGameState", function() {
+    function scanBoardPositions(positions) {
+      return positions.split(/\W+/);
+    }
+
     function GoGameState(options) {
       this.boardStones = {};
       options = options || {};
 
       var stones = options.white || "";
-      stones = stones.split(/\W+/);
+      stones = scanBoardPositions(stones);
       for(var i in stones) {
         var position = stones[i];
         this.boardStones[position] = GoGameState.WhiteStone;
       }
 
       stones = options.black || "";
-      stones = stones.split(/\W+/);
+      stones = scanBoardPositions(stones);
       for(var i in stones) {
         var position = stones[i];
         this.boardStones[position] = GoGameState.BlackStone;
