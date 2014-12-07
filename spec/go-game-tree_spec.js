@@ -1,22 +1,25 @@
 describe("GoGameTree", function() {
-  beforeEach(module("goGameTree"));
-
   var GoGameTree;
+  beforeEach(module("goGameTree"));
   beforeEach(inject(function(_GoGameTree_) {
     GoGameTree = _GoGameTree_;
   }));
 
-  function emptyTree() {
-    return new GoGameTree();
-  }
+  var emptyTree, thisTree, child, otherChild;
+  var initialState, derivedState;
+  beforeEach(function() {
+    emptyTree = new GoGameTree();
+    derivedState = {};
+    initialState = { deriveState: sinon.stub().returns(derivedState) };
+  });
 
   it("is a constructor", function() {
-    expect(emptyTree()).to.be.instanceOf(GoGameTree);
+    expect(emptyTree).to.be.instanceOf(GoGameTree);
   });
 
   describe("#parent()", function() {
     it("defaults to falsey", function() {
-      expect(emptyTree().parent()).to.not.exist;
+      expect(emptyTree.parent()).to.not.exist;
     });
 
     it("is initialized with constructor option", function() {
@@ -28,7 +31,7 @@ describe("GoGameTree", function() {
 
   describe("#state()", function() {
     it("defaults to falsey", function() {
-      expect(emptyTree().state()).to.not.exist;
+      expect(emptyTree.state()).to.not.exist;
     });
 
     it("is initialized with constructor option", function() {
@@ -40,7 +43,7 @@ describe("GoGameTree", function() {
   describe("#turnNumber()", function() {
     context("without parent", function() {
       it("defaults to falsey", function() {
-        expect(emptyTree().turnNumber()).to.not.exist;
+        expect(emptyTree.turnNumber()).to.not.exist;
       });
     });
 
@@ -60,7 +63,7 @@ describe("GoGameTree", function() {
 
   describe("#children()", function() {
     it("defaults to an empty array", function() {
-      expect(emptyTree().children()).to.be.empty;
+      expect(emptyTree.children()).to.be.empty;
     });
 
     it("is initialized with constructor option", function() {
@@ -71,7 +74,7 @@ describe("GoGameTree", function() {
 
   describe("#move()", function() {
     it("defaults to falsey", function() {
-      expect(emptyTree().move()).to.not.exist;
+      expect(emptyTree.move()).to.not.exist;
     });
 
     it("is initialized with constructor option", function() {
@@ -82,28 +85,24 @@ describe("GoGameTree", function() {
 
   describe("#addChild()", function() {
     it("add child to tree's children", function() {
-      var thisTree = new GoGameTree();
-      var child = thisTree.addChild();
+      thisTree = new GoGameTree();
+      child = thisTree.addChild();
       expect(thisTree.children()).to.contain(child);
     });
 
     it("sets child's parent to this tree", function() {
-      var thisTree = new GoGameTree();
-      var child = thisTree.addChild();
+      thisTree = new GoGameTree();
+      child = thisTree.addChild();
       expect(child.parent()).to.eq(thisTree);
     });
 
     it("sets child's turnNumber to one more than this tree's", function() {
-      var thisTree = new GoGameTree({turnNumber: 41});
-      var child = thisTree.addChild();
+      thisTree = new GoGameTree({turnNumber: 41});
+      child = thisTree.addChild();
       expect(child.turnNumber()).to.eq(42);
     });
 
     context("given 'move' option", function() {
-      var derivedState = { };
-      var initialState = { deriveState: sinon.stub().returns(derivedState) };
-      var thisTree, child;
-
       beforeEach(function() {
         thisTree = new GoGameTree({state: initialState});
         child = thisTree.addChild({move: "_move_"});
@@ -120,9 +119,6 @@ describe("GoGameTree", function() {
   });
 
   describe("#findChild()", function() {
-    var thisTree, child, otherChild;
-    var initialState = { deriveState: sinon.stub() };
-
     beforeEach(function() {
       thisTree = new GoGameTree({state: initialState});
       child = thisTree.addChild({move: "_move_"});
@@ -144,9 +140,6 @@ describe("GoGameTree", function() {
   });
 
   describe("#findOrAddChild()", function() {
-    var thisTree, child, otherChild;
-    var initialState = { deriveState: sinon.stub() };
-
     beforeEach(function() {
       thisTree = new GoGameTree({state: initialState});
       child = thisTree.addChild({move: "_move_"});
