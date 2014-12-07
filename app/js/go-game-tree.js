@@ -63,7 +63,6 @@
       var captures = options.captures || {}
       this._captures.white = captures.white || 0;
       this._captures.black = captures.black || 0;
-
       placeStones(this._boardStones,
                   GoGameState.WhiteStone,
                   options.white || "");
@@ -82,7 +81,19 @@
 
       captures: function(color) {
         return this._captures[color];
-      }
+      },
+
+      isLegalMove: function(move) {
+        return true;
+      },
+
+      derive: function(move) {
+        return this;
+      },
+
+      boardStones: function() {
+        return [];
+      },
     };
 
     return GoGameState;

@@ -31,10 +31,10 @@ describe( "GoGameState" , function() {
     });
 
     it("defaults to falsey", function() {
-      expect(emptyState().at("a1")).to.be.notOk;
+      expect(emptyState().at("a1")).not.to.be.ok;
     });
 
-    it("is falsy for empty cells", function() {
+    it("is falsy for empty positions", function() {
       expect(state.at("z19")).to.be.notOk;
     });
 
@@ -73,5 +73,15 @@ describe( "GoGameState" , function() {
     it("reports white captures", function() {
       expect(state.captures("black")).to.eq(10);
     });
+  });
+
+  describe( "#isLegalMove()" , function() {
+    it("determines if a move is legal");
+  });
+  describe( "#derive()" , function() {
+    it("derives new position");
+  });
+  describe( "#boardStones()" , function() {
+    it("lists board stones");
   });
 });
