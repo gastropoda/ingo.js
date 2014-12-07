@@ -92,7 +92,7 @@
         return !!(this.nextTurnColor(moveColor) && freePlace);
       },
 
-      derive: function(move) {
+      deriveState: function(move) {
         return this;
       },
 

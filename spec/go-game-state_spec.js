@@ -128,7 +128,7 @@ describe( "GoGameState" , function() {
     it("isn't if move is illegal ko");
   });
 
-  describe( "#derive()" , function() {
+  describe( "#derivedState()" , function() {
     it("derives new position");
   });
 
