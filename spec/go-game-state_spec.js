@@ -16,8 +16,8 @@ describe( "GoGameState" , function() {
 
   describe("constants", function() {
     it("are defined", function() {
-      expect(GoGameState.WhiteStone).to.be.ok;
-      expect(GoGameState.BlackStone).to.be.ok;
+      expect(GoGameState.WhiteStone).to.exist;
+      expect(GoGameState.BlackStone).to.exist;
     });
   });
 
