@@ -56,6 +56,12 @@
     return GoGameTree;
   })
   .factory("GoGameState", function() {
+    var letters = "ABCDEFGHJKLMNOPQRST";
+    function indexToPosition(index) {
+      var i = index[0], j = parseInt(index[1]) + 1;
+      return letters[i] + j.toString();
+    }
+
     function GoGameState(options) {
       options = options || {};
       this._boardStones = {};
@@ -64,16 +70,36 @@
       this._captures.white = captures.white || 0;
       this._captures.black = captures.black || 0;
       this._nextTurnColor = options.nextTurnColor || "black";
-      placeStones(this._boardStones,
-                  GoGameState.WhiteStone,
-                  options.white || "");
-      placeStones(this._boardStones,
-                  GoGameState.BlackStone,
-                  options.black || "");
+      placeStones(this._boardStones, GoGameState.WhiteStone, options.white || "");
+      placeStones(this._boardStones, GoGameState.BlackStone, options.black || "");
     }
 
     GoGameState.WhiteStone = "white";
     GoGameState.BlackStone = "black";
+
+    GoGameState.fromStrings = function() {
+      var strings = Array.prototype.slice.call(arguments)
+      strings.reverse();
+      var opts = strings[0] instanceof Object ? strings.shift() : {};
+      opts.black = [];
+      opts.white = [];
+      for(var j in strings) {
+        var string = strings[j].toUpperCase();
+        for(var i in string) {
+          var symbol = string[i];
+          var position = indexToPosition([i,j]);
+          switch(symbol) {
+            case "B":
+              opts.black.push(position);
+            break;
+            case "W":
+              opts.white.push(position);
+            break;
+          }
+        }
+      }
+      return new GoGameState(opts);
+    }
 
     GoGameState.prototype = {
       at: function(position) {
@@ -111,12 +137,7 @@
 
     return GoGameState;
 
-    function scanBoardPositions(positions) {
-      return positions.split(/\W+/);
-    }
-
     function placeStones(board, color, positions) {
-      positions = scanBoardPositions(positions);
       for(var i in positions) {
         var position = positions[i];
         board[position] = color;

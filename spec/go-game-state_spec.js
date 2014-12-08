@@ -14,6 +14,22 @@ describe( "GoGameState" , function() {
     expect(emptyState).to.be.instanceOf(GoGameState);
   });
 
+  describe("::fromStrings()", function() {
+    it("builds a game state from ascii-art", function() {
+      state = GoGameState.fromStrings(
+       //abcd
+        "....", // 3
+        ".B.W", // 2
+        "...B"  // 1
+      );
+      expect(state.at("A0")).to.not.exist;
+      expect(state.at("E4")).to.not.exist;
+      expect(state.at("B2")).to.eq(GoGameState.BlackStone);
+      expect(state.at("D1")).to.eq(GoGameState.BlackStone);
+      expect(state.at("D2")).to.eq(GoGameState.WhiteStone);
+    });
+  });
+
   describe("constants", function() {
     it("are defined", function() {
       expect(GoGameState.WhiteStone).to.exist;
@@ -24,8 +40,8 @@ describe( "GoGameState" , function() {
   describe("#at()", function() {
     beforeEach(function() {
       state = new GoGameState({
-        white: "a1",
-        black: "b2 c3",
+        white: ["A1"],
+        black: ["B2", "C3"],
       });
     });
 
@@ -34,16 +50,16 @@ describe( "GoGameState" , function() {
     });
 
     it("is falsy for empty positions", function() {
-      expect(state.at("z19")).to.not.exist;
+      expect(state.at("Z19")).to.not.exist;
     });
 
     it("returns GoGameState.WhiteStone for white stone positions", function() {
-      expect(state.at("a1")).to.eq(GoGameState.WhiteStone);
+      expect(state.at("A1")).to.eq(GoGameState.WhiteStone);
     });
 
     it("returns GoGameState.BlackStone for black stone positions", function() {
-      expect(state.at("b2")).to.eq(GoGameState.BlackStone);
-      expect(state.at("c3")).to.eq(GoGameState.BlackStone);
+      expect(state.at("B2")).to.eq(GoGameState.BlackStone);
+      expect(state.at("C3")).to.eq(GoGameState.BlackStone);
     });
 
   });
@@ -98,26 +114,26 @@ describe( "GoGameState" , function() {
 
   describe( "#isLegalMove()" , function() {
     it("isn't if position is occupied", function() {
-      state = new GoGameState({white: "a1"});
-      expect(state.isLegalMove({black: "a1"})).to.not.be.ok;
+      state = new GoGameState({white: ["A1"]});
+      expect(state.isLegalMove({black: "A1"})).to.not.be.ok;
     });
 
     context("white's turn", function() {
       it("is false for black", function() {
         state = new GoGameState({nextTurnColor: "white"});
-        expect(state.isLegalMove({black: "a1"})).to.not.be.ok;
+        expect(state.isLegalMove({black: "A1"})).to.not.be.ok;
       });
     });
 
     context("black's turn", function() {
       it("is false for white", function() {
         state = new GoGameState({nextTurnColor: "black"});
-        expect(state.isLegalMove({white: "a1"})).to.not.be.ok;
+        expect(state.isLegalMove({white: "A1"})).to.not.be.ok;
       });
     });
 
     it("isn't if both colors are present", function() {
-      expect(emptyState.isLegalMove({white: "a1", black: "b2"})).to.not.be.ok;
+      expect(emptyState.isLegalMove({white: "A1", black: "B2"})).to.not.be.ok;
     });
 
     it("isn't if no color is present", function() {
