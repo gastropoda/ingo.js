@@ -58,8 +58,13 @@
   .factory("GoGameState", function() {
     var letters = "ABCDEFGHJKLMNOPQRST";
     function indexToPosition(index) {
-      var i = index[0], j = parseInt(index[1]) + 1;
+      var i = index[0], j = index[1] + 1;
       return letters[i] + j.toString();
+    }
+    function positionToIndex(position) {
+      var i = letters.indexOf(position[0]);
+      var j = position.slice(1) - 1;
+      return [i,j];
     }
 
     function GoGameState(options) {
@@ -83,11 +88,16 @@
       var opts = strings[0] instanceof Object ? strings.shift() : {};
       opts.black = [];
       opts.white = [];
+      var offset = positionToIndex(opts.offset || "A1");
+      var i0 = offset[0];
+      var j0 = offset[1];
       for(var j in strings) {
+        j-=0;
         var string = strings[j].toUpperCase();
         for(var i in string) {
+          i-=0;
           var symbol = string[i];
-          var position = indexToPosition([i,j]);
+          var position = indexToPosition([i0 + i, j0 + j]);
           switch(symbol) {
             case "B":
               opts.black.push(position);

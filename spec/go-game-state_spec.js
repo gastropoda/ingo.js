@@ -28,6 +28,37 @@ describe( "GoGameState" , function() {
       expect(state.at("D1")).to.eq(GoGameState.BlackStone);
       expect(state.at("D2")).to.eq(GoGameState.WhiteStone);
     });
+
+    it("passes the options to the state constructor", function() {
+      state = GoGameState.fromStrings(
+        "....",
+        ".B.W",
+        "...B", {
+          nextTurnColor: "white",
+          captures: {
+            white: 1,
+            black: 2,
+          }
+        });
+      expect(state.nextTurnColor()).to.eq("white");
+      expect(state.captures("white")).to.eq(1);
+      expect(state.captures("black")).to.eq(2);
+      expect(state.at("B2")).to.eq(GoGameState.BlackStone);
+      expect(state.at("D1")).to.eq(GoGameState.BlackStone);
+      expect(state.at("D2")).to.eq(GoGameState.WhiteStone);
+    });
+
+    it("offsets the shape given the 'offset' option", function() {
+      state = GoGameState.fromStrings(
+       //fgh
+        "B.W", // 5
+        "..B",{// 4
+          offset: "F4"
+        });
+      expect(state.at("H4")).to.eq(GoGameState.BlackStone);
+      expect(state.at("F5")).to.eq(GoGameState.BlackStone);
+      expect(state.at("H5")).to.eq(GoGameState.WhiteStone);
+    });
   });
 
   describe("constants", function() {
