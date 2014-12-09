@@ -14,6 +14,8 @@ in**go** = 隠語, japanese for jar**go**n, ar**go**t
 
 ## Try it
 
+(for now just to see that the setup works: there is no interactive app to test the board yet)
+
 ```
 # install browser dependencies
 bower install
