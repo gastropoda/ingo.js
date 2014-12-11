@@ -77,7 +77,7 @@ describe( "GoGameState" , function() {
     });
 
     it("defaults to falsey", function() {
-      expect(emptyState.at("a1")).to.not.exist;
+      expect(emptyState.at("A1")).to.not.exist;
     });
 
     it("is falsy for empty positions", function() {
@@ -91,6 +91,12 @@ describe( "GoGameState" , function() {
     it("returns GoGameState.BlackStone for black stone positions", function() {
       expect(state.at("B2")).to.eq(GoGameState.BlackStone);
       expect(state.at("C3")).to.eq(GoGameState.BlackStone);
+    });
+
+    it("is case insensitive", function() {
+      expect(state.at("a1")).to.eq(GoGameState.WhiteStone);
+      expect(state.at("b2")).to.eq(GoGameState.BlackStone);
+      expect(state.at("c3")).to.eq(GoGameState.BlackStone);
     });
 
   });

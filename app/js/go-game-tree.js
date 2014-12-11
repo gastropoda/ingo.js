@@ -113,7 +113,7 @@
 
     GoGameState.prototype = {
       at: function(position) {
-        return this._boardStones[position];
+        return this._boardStones[position.toUpperCase()];
       },
 
       captures: function(color) {
@@ -123,7 +123,7 @@
       isLegalMove: function(move) {
         var moveColor = move.white ? "white" : "black";
         var movePosition = move.white || move.black;
-        var freePlace = !this.at(movePosition);
+        var freePlace = movePosition && !this.at(movePosition);
         if (move.white && move.black || !movePosition) return false;
         return !!(this.nextTurnColor(moveColor) && freePlace);
       },
