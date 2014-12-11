@@ -149,7 +149,7 @@
 
     function placeStones(board, color, positions) {
       for(var i in positions) {
-        var position = positions[i];
+        var position = positions[i].toUpperCase();
         board[position] = color;
       }
     }

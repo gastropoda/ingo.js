@@ -8,6 +8,7 @@ describe( "GoGameState" , function() {
   var emptyState, state;
   beforeEach(function() {
     emptyState = new GoGameState();
+    state = undefined;
   });
 
   it("is a constructor", function() {
@@ -69,36 +70,50 @@ describe( "GoGameState" , function() {
   });
 
   describe("#at()", function() {
-    beforeEach(function() {
-      state = new GoGameState({
-        white: ["A1"],
-        black: ["B2", "C3"],
+    function itReturnsPostionContent() {
+      it("defaults to falsey", function() {
+        expect(emptyState.at("A1")).to.not.exist;
       });
+
+      it("is falsy for empty positions", function() {
+        expect(state.at("Z19")).to.not.exist;
+      });
+
+      it("returns GoGameState.WhiteStone for white stone positions", function() {
+        expect(state.at("A1")).to.eq(GoGameState.WhiteStone);
+      });
+
+      it("returns GoGameState.BlackStone for black stone positions", function() {
+        expect(state.at("B2")).to.eq(GoGameState.BlackStone);
+        expect(state.at("C3")).to.eq(GoGameState.BlackStone);
+      });
+
+      it("is case insensitive", function() {
+        expect(state.at("a1")).to.eq(GoGameState.WhiteStone);
+        expect(state.at("b2")).to.eq(GoGameState.BlackStone);
+        expect(state.at("c3")).to.eq(GoGameState.BlackStone);
+      });
+    }
+
+    context("constructed with upper case positions", function() {
+      beforeEach(function() {
+        state = new GoGameState({
+          white: ["A1"],
+          black: ["B2", "C3"],
+        });
+      });
+      itReturnsPostionContent();
     });
 
-    it("defaults to falsey", function() {
-      expect(emptyState.at("A1")).to.not.exist;
+    context("constructed with lower case positions", function() {
+      beforeEach(function() {
+        state = new GoGameState({
+          white: ["a1"],
+          black: ["b2", "c3"],
+        });
+      });
+      itReturnsPostionContent();
     });
-
-    it("is falsy for empty positions", function() {
-      expect(state.at("Z19")).to.not.exist;
-    });
-
-    it("returns GoGameState.WhiteStone for white stone positions", function() {
-      expect(state.at("A1")).to.eq(GoGameState.WhiteStone);
-    });
-
-    it("returns GoGameState.BlackStone for black stone positions", function() {
-      expect(state.at("B2")).to.eq(GoGameState.BlackStone);
-      expect(state.at("C3")).to.eq(GoGameState.BlackStone);
-    });
-
-    it("is case insensitive", function() {
-      expect(state.at("a1")).to.eq(GoGameState.WhiteStone);
-      expect(state.at("b2")).to.eq(GoGameState.BlackStone);
-      expect(state.at("c3")).to.eq(GoGameState.BlackStone);
-    });
-
   });
 
   describe( "#captures()" , function() {
