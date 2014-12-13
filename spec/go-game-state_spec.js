@@ -217,6 +217,18 @@ describe( "GoGameState" , function() {
   });
 
   describe( "#boardStones()" , function() {
-    it("lists board stones");
+    it("lists board stones", function() {
+      state = GoGameState.fromStrings(
+       //abcd
+        "....", // 3
+        ".B.W", // 2
+        "...B"  // 1
+      );
+      var stones = state.boardStones();
+      expect(stones).to.include({ position: "D1", color: "black", });
+      expect(stones).to.include({ position: "B2", color: "black", });
+      expect(stones).to.include({ position: "D2", color: "white", });
+      expect(stones).to.have.length.of(3);
+    });
   });
 });

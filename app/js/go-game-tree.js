@@ -137,7 +137,15 @@
       },
 
       boardStones: function() {
-        return [];
+        var stones = [];
+        for(var position in this._boardStones) {
+          if (!this._boardStones.hasOwnProperty(position)) continue;
+          stones.push({
+            position: position,
+            color: this._boardStones[position]
+          });
+        }
+        return stones;
       },
 
       nextTurnColor: function(color) {
