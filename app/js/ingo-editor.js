@@ -1,16 +1,11 @@
 (function() {
   angular
-  .module("ingoEditor", ["goBoard"])
-  .controller("BoardController", ["$scope", function($scope) {
-    $scope.stones = [
-      {color: "black", position: "C2"},
-      {color: "black", position: "C3"},
-      {color: "white", position: "D1"},
-      {color: "white", position: "E1"},
-    ];
-    $scope.marks = [
-      {type: "triangle", position: "D1"},
-      {type: "triangle", position: "E1"},
-    ];
+  .module("ingoEditor", ["goBoard", "goGameTree"])
+  .controller("BoardController", ["$scope", "GoGameState", function($scope, GoGameState) {
+    $scope.currentState = GoGameState.fromStrings(
+      "..B",
+      "..B",
+      "...WW"
+    );
   }]);
 })();

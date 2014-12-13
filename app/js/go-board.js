@@ -4,12 +4,12 @@
   .directive("goBoard", ["paper", "boardPainter", function(paper, painter) {
     return {
       link: function postLink($scope, iElement, iAttrs) {
+        var currentState = $scope.currentState;
         var canvas = iElement[0];
         paper.setup(canvas);
         painter.setup(paper.view.viewSize.width, paper.view.viewSize.height);
         painter.drawBoard();
-        painter.drawStones($scope.stones);
-        painter.drawMarks($scope.marks);
+        painter.drawStones(currentState.boardStones());
         paper.view.draw();
       }
     };
