@@ -81,6 +81,7 @@
 
     GoGameState.WhiteStone = "white";
     GoGameState.BlackStone = "black";
+    GoGameState.IllegalMove = "Illegal move";
 
     GoGameState.fromStrings = function() {
       var strings = Array.prototype.slice.call(arguments)
@@ -129,6 +130,9 @@
       },
 
       deriveState: function(move) {
+        if (!this.isLegalMove(move)) {
+          throw GoGameState.IllegalMove;
+        }
         return this;
       },
 

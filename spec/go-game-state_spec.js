@@ -5,10 +5,11 @@ describe( "GoGameState" , function() {
     GoGameState = _GoGameState_;
   }));
 
-  var emptyState, state;
+  var emptyState, state, derivedState;
   beforeEach(function() {
     emptyState = new GoGameState();
     state = undefined;
+    derivedState = undefined;
   });
 
   it("is a constructor", function() {
@@ -196,8 +197,23 @@ describe( "GoGameState" , function() {
     it("isn't if move is illegal ko");
   });
 
-  describe( "#derivedState()" , function() {
-    it("derives new position");
+  describe( "#deriveState()" , function() {
+    beforeEach(function() {
+      state = new GoGameState.fromStrings(
+        "B.W", {
+        captures: {
+          black: 1,
+          white: 2,
+        },
+        nextTurnColor: "black"
+      });
+    });
+    it("throws if illegal move", function() {
+      sinon.stub(state, "isLegalMove").returns(false);
+      expect(function() {
+        derivedState = state.deriveState({black: "B1"});
+      }).to.throw(GoGameState.IllegalMove);
+    });
   });
 
   describe( "#boardStones()" , function() {
