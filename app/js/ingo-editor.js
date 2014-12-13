@@ -1,7 +1,7 @@
 (function() {
   angular
-  .module("ingoEditor", ["goBoard", "smartGame"])
-  .controller("BoardController", ["$scope", "$http", "SGF", function($scope, $http, SGF) {
+  .module("ingoEditor", ["goBoard"])
+  .controller("BoardController", ["$scope", function($scope) {
     $scope.stones = [
       {color: "black", position: "C2"},
       {color: "black", position: "C3"},
@@ -12,11 +12,5 @@
       {type: "triangle", position: "D1"},
       {type: "triangle", position: "E1"},
     ];
-
-    var sgfPromise = $http.get("__go4go_20141129_Chen-Yiming_Chen-Si.sgf");
-    sgfPromise.success(function(rawSgf) {
-      var game = SGF.parse(rawSgf);
-      console.log(game);
-    });
   }]);
 })();
