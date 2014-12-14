@@ -75,8 +75,8 @@
       this._captures.white = captures.white || 0;
       this._captures.black = captures.black || 0;
       this._nextTurnColor = options.nextTurnColor || "black";
-      placeStones(this._boardStones, GoGameState.WhiteStone, options.white || "");
-      placeStones(this._boardStones, GoGameState.BlackStone, options.black || "");
+      placeStones(this._boardStones, GoGameState.WhiteStone, options.white || []);
+      placeStones(this._boardStones, GoGameState.BlackStone, options.black || []);
     }
 
     GoGameState.WhiteStone = "white";
@@ -133,7 +133,11 @@
         if (!this.isLegalMove(move)) {
           throw GoGameState.IllegalMove;
         }
-        return this;
+        var derivedState = new GoGameState({ });
+        derivedState._boardStones = angular.extend({}, this._boardStones);
+        placeStones(derivedState._boardStones, GoGameState.BlackStone, move.black && [move.black] || []);
+        placeStones(derivedState._boardStones, GoGameState.WhiteStone, move.white && [move.white] || []);
+        return derivedState;
       },
 
       boardStones: function() {

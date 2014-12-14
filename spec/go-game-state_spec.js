@@ -214,6 +214,11 @@ describe( "GoGameState" , function() {
         derivedState = state.deriveState({black: "B1"});
       }).to.throw(GoGameState.IllegalMove);
     });
+    it("adds a stone at a free position", function() {
+      sinon.stub(state, "isLegalMove").returns(true);
+      derivedState = state.deriveState({black: "B1"});
+      expect(derivedState.at("B1")).to.eq(GoGameState.BlackStone);
+    });
   });
 
   describe( "#boardStones()" , function() {
