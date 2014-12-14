@@ -4,13 +4,14 @@
   .directive("goBoard", ["paper", "boardPainter", function(paper, painter) {
     return {
       link: function postLink($scope, iElement, iAttrs) {
-        var currentState = $scope.currentState;
         var canvas = iElement[0];
         paper.setup(canvas);
         painter.setup(paper.view.viewSize.width, paper.view.viewSize.height);
         painter.drawBoard();
-        painter.drawStones(currentState.boardStones());
-        paper.view.draw();
+        $scope.$watch("currentState", function(currentState, lastState) {
+          painter.drawStones(currentState.boardStones());
+          paper.view.draw();
+        });
       }
     };
   }])
@@ -20,6 +21,7 @@
     var letters = "ABCDEFGHJKLMNOPQRST";
     var points = [ "D4", "D10", "D16", "K4", "K10", "K16", "Q4", "Q10", "Q16" ];
     var symbols = {};
+    var layers = {};
     function drawLines() {
       for(var i = 0; i<19; i++) {
         var x = board.left + i * board.xStep;
@@ -133,16 +135,27 @@
         board.stoneRadius = board.xStep * 0.45;
         board.symbolRadius = board.xStep * 0.25;
         createSymbols();
+        layers = {
+          board: new paper.Layer(),
+          stones: new paper.Layer(),
+          marks: new paper.Layer(),
+        };
       },
       drawBoard: function() {
+        layers.board.activate();
+        layers.board.removeChildren();
         drawLines();
         drawPoints();
         drawCoordinates();
       },
       drawStones: function(stones) {
+        layers.stones.activate();
+        layers.stones.removeChildren();
         stones.map(drawStone);
       },
       drawMarks: function(marks) {
+        layers.marks.activate();
+        layers.marks.removeChildren();
         marks.map(drawMark);
       },
     };
