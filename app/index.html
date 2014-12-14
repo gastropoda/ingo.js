@@ -10,6 +10,7 @@
 <div ng-controller="BoardController as board">
   <div>
     <button class="btn btn-default btn-sm" ng-click="prevGameState()">&lt;</button>
+    turn: {{ currentNode.turnNumber() }}
     <button class="btn btn-default btn-sm" ng-click="nextGameState()">&gt;</button>
   </div>
   <canvas go-board width=600 height=570></canvas>
