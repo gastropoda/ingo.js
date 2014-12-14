@@ -208,16 +208,29 @@ describe( "GoGameState" , function() {
         nextTurnColor: "black"
       });
     });
-    it("throws if illegal move", function() {
-      sinon.stub(state, "isLegalMove").returns(false);
-      expect(function() {
-        derivedState = state.deriveState({black: "B1"});
-      }).to.throw(GoGameState.IllegalMove);
+    context("requested move is illegal", function() {
+      beforeEach(function() {
+        sinon.stub(state, "isLegalMove").returns(false);
+      });
+      it("throws an exception", function() {
+        expect(function() {
+          state.deriveState({black: "B1"});
+        }).to.throw(GoGameState.IllegalMove);
+      });
     });
-    it("adds a stone at a free position", function() {
-      sinon.stub(state, "isLegalMove").returns(true);
-      derivedState = state.deriveState({black: "B1"});
-      expect(derivedState.at("B1")).to.eq(GoGameState.BlackStone);
+    context("requested move is legal", function() {
+      beforeEach(function() {
+        sinon.stub(state, "isLegalMove").returns(true);
+        derivedState = state.deriveState({black: "B1"});
+      });
+      it("adds a stone to the board", function() {
+        expect(derivedState.at("B1")).to.eq(GoGameState.BlackStone);
+      });
+      it("changes next turn color", function() {
+        expect(derivedState.nextTurnColor()).to.eq("white");
+        derivedState = derivedState.deriveState({white: "Z19"});
+        expect(derivedState.nextTurnColor()).to.eq("black");
+      });
     });
   });
 

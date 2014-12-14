@@ -133,7 +133,9 @@
         if (!this.isLegalMove(move)) {
           throw GoGameState.IllegalMove;
         }
-        var derivedState = new GoGameState({ });
+        var derivedState = new GoGameState({
+          nextTurnColor: this.nextTurnColor()==="black"?"white":"black"
+        });
         derivedState._boardStones = angular.extend({}, this._boardStones);
         placeStones(derivedState._boardStones, GoGameState.BlackStone, move.black && [move.black] || []);
         placeStones(derivedState._boardStones, GoGameState.WhiteStone, move.white && [move.white] || []);
