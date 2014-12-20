@@ -197,6 +197,37 @@ describe( "GoGameState" , function() {
     it("isn't if move is illegal ko");
   });
 
+  describe("#findChains()", function() {
+    var chains;
+    context("empty board", function() {
+      it("has no chains", function() {
+        expect(emptyState.findChains()).to.be.empty;
+      });
+    });
+    context("single stone inside the board", function() {
+      beforeEach(function() {
+        state = GoGameState.fromStrings(
+          "...",
+          ".B.",
+          "..."
+        );
+        chains = state.findChains();
+      });
+      it("counts as one chain", function() {
+        expect(chains).to.have.length(1);
+      });
+      it("is in chain's stones", function() {
+        expect(chains[0].stones).to.have.members(["B2"]);
+      });
+      it("has 4 liberties", function() {
+        expect(chains[0].liberties).to.eq(4);
+      });
+      it("has stone's color", function() {
+        expect(chains[0].color).to.eq(GoGameState.BlackStone);
+      });
+    });
+  });
+
   describe( "#deriveState()" , function() {
     beforeEach(function() {
       state = new GoGameState.fromStrings(
