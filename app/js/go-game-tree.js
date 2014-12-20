@@ -140,6 +140,19 @@
         return derivedState;
       },
 
+      findChains: function() {
+        var chainsList = [];
+        for(var position in this._boardStones) {
+          var color = this._boardStones[position];
+          chainsList.push({
+            stones: [ position ],
+            liberties: 4,
+            color: color,
+          });
+        }
+        return chainsList;
+      },
+
       boardStones: function() {
         var stones = [];
         for(var position in this._boardStones) {
