@@ -17,10 +17,10 @@
     });
 
     var node = rootNode;
-    node = node.addChild({move: {black: "C2"}});
-    node = node.addChild({move: {white: "D1"}});
-    node = node.addChild({move: {black: "C3"}});
-    node = node.addChild({move: {white: "E1"}});
+    node = node.addChild({move: {C2: "black"}});
+    node = node.addChild({move: {D1: "white"}});
+    node = node.addChild({move: {C3: "black"}});
+    node = node.addChild({move: {E1: "white"}});
     setCurrentNode(node);
 
     $scope.nextGameState = function() {

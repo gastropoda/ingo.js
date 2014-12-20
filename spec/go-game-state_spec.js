@@ -168,28 +168,28 @@ describe( "GoGameState" , function() {
   describe( "#isLegalMove()" , function() {
     it("isn't if position is occupied", function() {
       state = new GoGameState({white: ["A1"]});
-      expect(state.isLegalMove({black: "A1"})).to.not.be.ok;
+      expect(state.isLegalMove({A1: "black"})).to.not.be.ok;
     });
 
     context("white's turn", function() {
       it("is false for black", function() {
         state = new GoGameState({nextTurnColor: "white"});
-        expect(state.isLegalMove({black: "A1"})).to.not.be.ok;
+        expect(state.isLegalMove({A1: "black"})).to.not.be.ok;
       });
     });
 
     context("black's turn", function() {
       it("is false for white", function() {
         state = new GoGameState({nextTurnColor: "black"});
-        expect(state.isLegalMove({white: "A1"})).to.not.be.ok;
+        expect(state.isLegalMove({A1: "white"})).to.not.be.ok;
       });
     });
 
     it("isn't if both colors are present", function() {
-      expect(emptyState.isLegalMove({white: "A1", black: "B2"})).to.not.be.ok;
+      expect(emptyState.isLegalMove({A1: "white", B2: "black"})).to.not.be.ok;
     });
 
-    it("isn't if no color is present", function() {
+    it("isn't if empty", function() {
       expect(emptyState.isLegalMove({})).to.not.be.ok;
     });
 
@@ -214,21 +214,21 @@ describe( "GoGameState" , function() {
       });
       it("throws an exception", function() {
         expect(function() {
-          state.deriveState({black: "B1"});
+          state.deriveState({B1: "black"});
         }).to.throw(GoGameState.IllegalMove);
       });
     });
     context("requested move is legal", function() {
       beforeEach(function() {
         sinon.stub(state, "isLegalMove").returns(true);
-        derivedState = state.deriveState({black: "B1"});
+        derivedState = state.deriveState({B1: "black"});
       });
       it("adds a stone to the board", function() {
         expect(derivedState.at("B1")).to.eq(GoGameState.BlackStone);
       });
       it("changes next turn color", function() {
         expect(derivedState.nextTurnColor()).to.eq("white");
-        derivedState = derivedState.deriveState({white: "Z19"});
+        derivedState = derivedState.deriveState({Z19: "white"});
         expect(derivedState.nextTurnColor()).to.eq("black");
       });
     });

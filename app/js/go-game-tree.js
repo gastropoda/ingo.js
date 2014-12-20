@@ -122,11 +122,12 @@
       },
 
       isLegalMove: function(move) {
-        var moveColor = move.white ? "white" : "black";
-        var movePosition = move.white || move.black;
+        var positions = Object.keys(move);
+        var movePosition = positions[0];
+        var moveColor = move[movePosition];
         var freePlace = movePosition && !this.at(movePosition);
         if (move.white && move.black || !movePosition) return false;
-        return !!(this.nextTurnColor(moveColor) && freePlace);
+        return !!(positions.length === 1 && this.nextTurnColor(moveColor) && freePlace);
       },
 
       deriveState: function(move) {
@@ -136,9 +137,7 @@
         var derivedState = new GoGameState({
           nextTurnColor: this.nextTurnColor()==="black"?"white":"black"
         });
-        derivedState._boardStones = angular.extend({}, this._boardStones);
-        placeStones(derivedState._boardStones, GoGameState.BlackStone, move.black && [move.black] || []);
-        placeStones(derivedState._boardStones, GoGameState.WhiteStone, move.white && [move.white] || []);
+        derivedState._boardStones = angular.extend({}, this._boardStones, move);
         return derivedState;
       },
 
