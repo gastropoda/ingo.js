@@ -126,7 +126,6 @@
         var movePosition = positions[0];
         var moveColor = move[movePosition];
         var freePlace = movePosition && !this.at(movePosition);
-        if (move.white && move.black || !movePosition) return false;
         return !!(positions.length === 1 && this.nextTurnColor(moveColor) && freePlace);
       },
 
