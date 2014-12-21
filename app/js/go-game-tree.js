@@ -75,6 +75,38 @@
       if (j<18) neighbours.push( [i,j+1] );
       return neighbours;
     }
+    function findChains(boardStones) {
+      var chainsMap = {};
+      var chainsList = [];
+      for(var position in boardStones) {
+        var color = boardStones[position];
+        var thisChain = chainsMap[position];
+        if (!thisChain) {
+          thisChain = {
+            stones: [ position ],
+            liberties: [],
+            color: color,
+          };
+          chainsList.push(thisChain);
+          chainsMap[position] = thisChain;
+        }
+        var neighbours = listNeighbours(position);
+        for(var n in neighbours) {
+          var nPos= indexToPosition(neighbours[n]);
+          if ( boardStones[nPos] === color ) {
+            if (!chainsMap[nPos]) {
+              chainsMap[nPos] = thisChain;
+              thisChain.stones.push(nPos);
+            }
+          } else if ( !boardStones[nPos] ) {
+            if (thisChain.liberties.indexOf(nPos) < 0) {
+              thisChain.liberties.push(nPos);
+            }
+          }
+        }
+      }
+      return chainsList;
+    }
 
     function GoGameState(options) {
       options = options || {};
@@ -150,37 +182,7 @@
       },
 
       findChains: function() {
-        var chainsMap = {};
-        var chainsList = [];
-        for(var position in this._boardStones) {
-          var color = this._boardStones[position];
-          var thisChain = chainsMap[position];
-          if (!thisChain) {
-            thisChain = {
-              stones: [ position ],
-              liberties: [],
-              color: color,
-            };
-            chainsList.push(thisChain);
-            chainsMap[position] = thisChain;
-          }
-          var liberties = {};
-          var neighbours = listNeighbours(position);
-          for(var n in neighbours) {
-            var nPos= indexToPosition(neighbours[n]);
-            if ( this._boardStones[nPos] === color ) {
-              if (!chainsMap[nPos]) {
-                chainsMap[nPos] = thisChain;
-                thisChain.stones.push(nPos);
-              }
-            } else if ( !this._boardStones[nPos] ) {
-              if (thisChain.liberties.indexOf(nPos) < 0) {
-                thisChain.liberties.push(nPos);
-              }
-            }
-          }
-        }
-        return chainsList;
+        return findChains(this._boardStones);
       },
 
       boardStones: function() {
