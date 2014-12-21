@@ -66,6 +66,15 @@
       var j = position.slice(1) - 1;
       return [i,j];
     }
+    function listNeighbours(position) {
+      var ij = positionToIndex(position), i=ij[0], j=ij[1];
+      var neighbours = [];
+      if (i>0) neighbours.push( [i-1,j] );
+      if (i<18) neighbours.push( [i+1,j] );
+      if (j>0) neighbours.push( [i,j-1] );
+      if (j<18) neighbours.push( [i,j+1] );
+      return neighbours;
+    }
 
     function GoGameState(options) {
       options = options || {};
@@ -155,15 +164,10 @@
             chainsList.push(thisChain);
             chainsMap[position] = thisChain;
           }
-          var ij = positionToIndex(position), i=ij[0], j=ij[1];
-          var neighbors = [];
           var liberties = {};
-          if (i>0) neighbors.push( [i-1,j] );
-          if (i<18) neighbors.push( [i+1,j] );
-          if (j>0) neighbors.push( [i,j-1] );
-          if (j<18) neighbors.push( [i,j+1] );
-          for(var n in neighbors) {
-            var nPos= indexToPosition(neighbors[n]);
+          var neighbours = listNeighbours(position);
+          for(var n in neighbours) {
+            var nPos= indexToPosition(neighbours[n]);
             if ( this._boardStones[nPos] === color ) {
               if (!chainsMap[nPos]) {
                 chainsMap[nPos] = thisChain;
