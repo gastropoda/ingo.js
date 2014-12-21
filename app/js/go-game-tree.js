@@ -73,39 +73,40 @@
       if (i<18) neighbours.push( [i+1,j] );
       if (j>0) neighbours.push( [i,j-1] );
       if (j<18) neighbours.push( [i,j+1] );
-      return neighbours;
+      return neighbours.map(indexToPosition);
     }
     function findChains(boardStones) {
       var chainsMap = {};
       var chainsList = [];
       for(var position in boardStones) {
         var color = boardStones[position];
-        var thisChain = chainsMap[position];
-        if (!thisChain) {
-          thisChain = {
-            stones: [ position ],
-            liberties: [],
-            color: color,
-          };
-          chainsList.push(thisChain);
-          chainsMap[position] = thisChain;
-        }
-        var neighbours = listNeighbours(position);
-        for(var n in neighbours) {
-          var nPos= indexToPosition(neighbours[n]);
-          if ( boardStones[nPos] === color ) {
-            if (!chainsMap[nPos]) {
-              chainsMap[nPos] = thisChain;
-              thisChain.stones.push(nPos);
-            }
-          } else if ( !boardStones[nPos] ) {
-            if (thisChain.liberties.indexOf(nPos) < 0) {
-              thisChain.liberties.push(nPos);
-            }
-          }
-        }
+        var chain = chainsMap[position] || newChain(position, color);
+        listNeighbours(position).forEach(processNeighbour, {
+          color: color,
+          chain: chain
+        });
       }
       return chainsList;
+
+      function newChain(position, color) {
+        var chain = {
+          stones: [ position ],
+          liberties: [],
+          color: color,
+        };
+        chainsList.push(chain);
+        chainsMap[position] = chain;
+        return chain;
+      }
+
+      function processNeighbour(neighbour) {
+        if (boardStones[neighbour] === this.color && !chainsMap[neighbour]) {
+          chainsMap[neighbour] = this.chain;
+          this.chain.stones.push(neighbour);
+        } else if ( !boardStones[neighbour] && this.chain.liberties.indexOf(neighbour) < 0) {
+          this.chain.liberties.push(neighbour);
+        }
+      }
     }
 
     function GoGameState(options) {
