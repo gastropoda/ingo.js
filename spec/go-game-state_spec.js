@@ -270,6 +270,35 @@ describe( "GoGameState" , function() {
         expect(chains[0].color).to.eq(GoGameState.BlackStone);
       });
     });
+    context("several chains of two colors", function() {
+      beforeEach(function() {
+        state = GoGameState.fromStrings(
+        // ABCDEFGHJ
+          ".........", // 5
+          "...W.....", // 4
+          ".B...B.W.", // 3
+          ".B.BBBWW.", // 2
+          ".BB...W.."  // 1
+        // ABCDEFGHJ
+        );
+        // make it easier to test
+        chains = state.findChains().map(function(chain) {
+          return chain.stones.sort().
+            concat([chain.color]).
+            concat([chain.liberties.length]).
+            join(" ");
+        });
+      });
+      it("finds all chains", function() {
+        expect(chains).to.have.length(4);
+        expect(chains).to.have.members([
+          "B1 B2 B3 C1 black 7",
+          "D4 white 4",
+          "D2 E2 F2 F3 black 8",
+          "G1 G2 H2 H3 white 6"
+        ]);
+      });
+    });
   });
 
   describe( "#deriveState()" , function() {
