@@ -220,7 +220,51 @@ describe( "GoGameState" , function() {
         expect(chains[0].stones).to.have.members(["B2"]);
       });
       it("has 4 liberties", function() {
-        expect(chains[0].liberties).to.eq(4);
+        expect(chains[0].liberties).to.have.length(4);
+      });
+      it("has stone's color", function() {
+        expect(chains[0].color).to.eq(GoGameState.BlackStone);
+      });
+    });
+    context("single stone on the side", function() {
+      beforeEach(function() {
+        state = GoGameState.fromStrings(
+          "...",
+          ".B."
+        );
+        chains = state.findChains();
+      });
+      it("counts as one chain", function() {
+        expect(chains).to.have.length(1);
+      });
+      it("is in chain's stones", function() {
+        expect(chains[0].stones).to.have.members(["B1"]);
+      });
+      it("has 3 liberties", function() {
+        expect(chains[0].liberties).to.have.length(3);
+      });
+      it("has stone's color", function() {
+        expect(chains[0].color).to.eq(GoGameState.BlackStone);
+      });
+    });
+    context("several connected stones", function() {
+      beforeEach(function() {
+        state = GoGameState.fromStrings(
+          "...",
+          ".B.",
+          ".B.",
+          ".BB."
+        );
+        chains = state.findChains();
+      });
+      it("count as one chain", function() {
+        expect(chains).to.have.length(1);
+      });
+      it("lists all stones", function() {
+        expect(chains[0].stones).to.have.members(["B1", "B2", "B3", "C1"]);
+      });
+      it("correctly counts liberties", function() {
+        expect(chains[0].liberties).to.have.length(7);
       });
       it("has stone's color", function() {
         expect(chains[0].color).to.eq(GoGameState.BlackStone);

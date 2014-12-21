@@ -141,14 +141,40 @@
       },
 
       findChains: function() {
+        var chainsMap = {};
         var chainsList = [];
         for(var position in this._boardStones) {
           var color = this._boardStones[position];
-          chainsList.push({
-            stones: [ position ],
-            liberties: 4,
-            color: color,
-          });
+          var thisChain = chainsMap[position];
+          if (!thisChain) {
+            thisChain = {
+              stones: [ position ],
+              liberties: [],
+              color: color,
+            };
+            chainsList.push(thisChain);
+            chainsMap[position] = thisChain;
+          }
+          var ij = positionToIndex(position), i=ij[0], j=ij[1];
+          var neighbors = [];
+          var liberties = {};
+          if (i>0) neighbors.push( [i-1,j] );
+          if (i<18) neighbors.push( [i+1,j] );
+          if (j>0) neighbors.push( [i,j-1] );
+          if (j<18) neighbors.push( [i,j+1] );
+          for(var n in neighbors) {
+            var nPos= indexToPosition(neighbors[n]);
+            if ( this._boardStones[nPos] === color ) {
+              if (!chainsMap[nPos]) {
+                chainsMap[nPos] = thisChain;
+                thisChain.stones.push(nPos);
+              }
+            } else if ( !this._boardStones[nPos] ) {
+              if (thisChain.liberties.indexOf(nPos) < 0) {
+                thisChain.liberties.push(nPos);
+              }
+            }
+          }
         }
         return chainsList;
       },
