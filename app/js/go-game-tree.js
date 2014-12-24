@@ -175,11 +175,20 @@
         if (!this.isLegalMove(move)) {
           throw GoGameState.IllegalMove;
         }
+        var moveColor = this.nextTurnColor();
         var derivedState = new GoGameState({
           nextTurnColor: this.nextTurnColor()==="black"?"white":"black",
           prisoners: this._prisoners,
         });
         derivedState._boardStones = angular.extend({}, this._boardStones, move);
+        derivedState.findChains().map(function(chain) {
+          if (!chain.liberties.length) {
+            chain.stones.forEach(function(position) {
+              delete derivedState._boardStones[position];
+            });
+            derivedState._prisoners[moveColor] += chain.stones.length;
+          }
+        });
         return derivedState;
       },
 
