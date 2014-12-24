@@ -309,7 +309,7 @@ describe( "GoGameState" , function() {
           black: 1,
           white: 2,
         },
-        nextTurnColor: "black"
+        nextTurnColor: "black",
       });
     });
     context("requested move is illegal", function() {
@@ -334,6 +334,10 @@ describe( "GoGameState" , function() {
         expect(derivedState.nextTurnColor()).to.eq("white");
         derivedState = derivedState.deriveState({Z19: "white"});
         expect(derivedState.nextTurnColor()).to.eq("black");
+      });
+      it("keeps prisoner counts", function() {
+        expect(derivedState.prisoners("black")).to.eq(1);
+        expect(derivedState.prisoners("white")).to.eq(2);
       });
     });
     context("requested move surrounds opponents group", function() {
