@@ -176,7 +176,8 @@
           throw GoGameState.IllegalMove;
         }
         var derivedState = new GoGameState({
-          nextTurnColor: this.nextTurnColor()==="black"?"white":"black"
+          nextTurnColor: this.nextTurnColor()==="black"?"white":"black",
+          prisoners: this._prisoners,
         });
         derivedState._boardStones = angular.extend({}, this._boardStones, move);
         return derivedState;
