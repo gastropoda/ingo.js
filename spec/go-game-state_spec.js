@@ -312,7 +312,7 @@ describe( "GoGameState" , function() {
         nextTurnColor: "black",
       });
     });
-    context("requested move is illegal", function() {
+    context("move is illegal", function() {
       beforeEach(function() {
         sinon.stub(state, "isLegalMove").returns(false);
       });
@@ -322,7 +322,7 @@ describe( "GoGameState" , function() {
         }).to.throw(GoGameState.IllegalMove);
       });
     });
-    context("requested move is legal", function() {
+    context("move is legal", function() {
       beforeEach(function() {
         sinon.stub(state, "isLegalMove").returns(true);
         derivedState = state.deriveState({B1: "black"});
@@ -340,7 +340,7 @@ describe( "GoGameState" , function() {
         expect(derivedState.prisoners("white")).to.eq(2);
       });
     });
-    context("requested move surrounds opponents group", function() {
+    context("move surrounds opponents group", function() {
       beforeEach(function() {
         state = new GoGameState.fromStrings(
           ".BBBBB.",
@@ -361,6 +361,31 @@ describe( "GoGameState" , function() {
       });
       it("increases the prisoner's count by the captured amount", function() {
         expect(derivedState.prisoners("black")).to.eq(5);
+      });
+    });
+    context("move apparently suicides but also surrounds opponents group", function() {
+      beforeEach(function() {
+        state = new GoGameState.fromStrings(
+          "..BWW.",
+          ".BW.BW.",
+          "..BWW..", {
+            prisoners: {
+              white: 1,
+              black: 2,
+            }
+          }
+        );
+        derivedState = state.deriveState({D2: "black"});
+      });
+      it("removes captured stone(s) from the board", function() {
+        expect(derivedState.at("C2")).to.not.exist;
+      });
+      it("increases the prisoner's count by the captured amount", function() {
+        expect(derivedState.prisoners("black")).to.eq(3);
+      });
+      it("keeps the apparently suiceded chain on board", function() {
+        expect(derivedState.at("D2")).to.eq(GoGameState.BlackStone);
+        expect(derivedState.at("E2")).to.eq(GoGameState.BlackStone);
       });
     });
   });

@@ -182,7 +182,7 @@
         });
         derivedState._boardStones = angular.extend({}, this._boardStones, move);
         derivedState.findChains().map(function(chain) {
-          if (!chain.liberties.length) {
+          if (chain.color !== moveColor && !chain.liberties.length) {
             chain.stones.forEach(function(position) {
               delete derivedState._boardStones[position];
             });
