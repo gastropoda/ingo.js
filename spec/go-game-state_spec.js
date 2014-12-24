@@ -37,14 +37,14 @@ describe( "GoGameState" , function() {
         ".B.W",
         "...B", {
           nextTurnColor: "white",
-          captures: {
+          prisoners: {
             white: 1,
             black: 2,
           }
         });
       expect(state.nextTurnColor()).to.eq("white");
-      expect(state.captures("white")).to.eq(1);
-      expect(state.captures("black")).to.eq(2);
+      expect(state.prisoners("white")).to.eq(1);
+      expect(state.prisoners("black")).to.eq(2);
       expect(state.at("B2")).to.eq(GoGameState.BlackStone);
       expect(state.at("D1")).to.eq(GoGameState.BlackStone);
       expect(state.at("D2")).to.eq(GoGameState.WhiteStone);
@@ -117,11 +117,11 @@ describe( "GoGameState" , function() {
     });
   });
 
-  describe( "#captures()" , function() {
+  describe( "#prisoners()" , function() {
 
     beforeEach(function() {
       state = new GoGameState({
-        captures: {
+        prisoners: {
           white: 5,
           black: 10,
         }
@@ -129,16 +129,16 @@ describe( "GoGameState" , function() {
     });
 
     it("defaults to 0", function() {
-      expect(emptyState.captures("white")).to.eq(0);
-      expect(emptyState.captures("black")).to.eq(0);
+      expect(emptyState.prisoners("white")).to.eq(0);
+      expect(emptyState.prisoners("black")).to.eq(0);
     });
 
-    it("reports white captures", function() {
-      expect(state.captures("white")).to.eq(5);
+    it("reports white prisoners", function() {
+      expect(state.prisoners("white")).to.eq(5);
     });
 
-    it("reports black captures", function() {
-      expect(state.captures("black")).to.eq(10);
+    it("reports black prisoners", function() {
+      expect(state.prisoners("black")).to.eq(10);
     });
   });
 
@@ -305,7 +305,7 @@ describe( "GoGameState" , function() {
     beforeEach(function() {
       state = new GoGameState.fromStrings(
         "B.W", {
-        captures: {
+        prisoners: {
           black: 1,
           white: 2,
         },

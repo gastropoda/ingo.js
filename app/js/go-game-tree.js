@@ -112,10 +112,10 @@
     function GoGameState(options) {
       options = options || {};
       this._boardStones = {};
-      this._captures = {};
-      var captures = options.captures || {}
-      this._captures.white = captures.white || 0;
-      this._captures.black = captures.black || 0;
+      this._prisoners = {};
+      var prisoners = options.prisoners || {}
+      this._prisoners.white = prisoners.white || 0;
+      this._prisoners.black = prisoners.black || 0;
       this._nextTurnColor = options.nextTurnColor || "black";
       placeStones(this._boardStones, GoGameState.WhiteStone, options.white || []);
       placeStones(this._boardStones, GoGameState.BlackStone, options.black || []);
@@ -159,8 +159,8 @@
         return this._boardStones[position.toUpperCase()];
       },
 
-      captures: function(color) {
-        return this._captures[color];
+      prisoners: function(color) {
+        return this._prisoners[color];
       },
 
       isLegalMove: function(move) {
