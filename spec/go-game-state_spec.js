@@ -336,6 +336,29 @@ describe( "GoGameState" , function() {
         expect(derivedState.nextTurnColor()).to.eq("black");
       });
     });
+    context("requested move surrounds opponents group", function() {
+      beforeEach(function() {
+        state = new GoGameState.fromStrings(
+          ".BBBBB.",
+          ".BWWW..",
+          "..BBB..", {
+            prisoners: {
+              white: 1,
+              black: 2,
+            }
+          }
+        );
+        derivedState = state.deriveState({F2: "black"});
+      });
+      it("removes captured stones from the board", function() {
+        expect(derivedState.at("C2")).to.not.exist;
+        expect(derivedState.at("D2")).to.not.exist;
+        expect(derivedState.at("E2")).to.not.exist;
+      });
+      it("increases the prisoner's count by the captured amount", function() {
+        expect(derivedState.prisoners("black")).to.eq(5);
+      });
+    });
   });
 
   describe( "#boardStones()" , function() {
