@@ -1,8 +1,8 @@
-Collection = GameTree+
-GameTree = "(" Sequence GameTree* ")"
-Sequence = Node+
-Node = ";" Property*
-Property = PropIdent PropValue+
+Collection = (WS GameTree WS)+
+GameTree = "(" WS Sequence WS GameTree* WS ")"
+Sequence = (WS Node WS)+
+Node = ";" (WS Property WS)*
+Property = PropIdent (WS PropValue WS)+
 PropIdent = UcLetter+
 PropValue = "[" CValueType "]"
 CValueType = ValueType / Compose
@@ -23,22 +23,27 @@ Number = [+-]? Digit+
 Real = Number ("." Digit+)?
 Double = [12]
 Color = [BW]
-SimpleText = SimpleTextToken*
-Text = TextToken*
-SimpleTextToken = SoftBreak / WhiteSpace / Escape / TextChar
-TextToken = SoftBreak / HardBreak / WhiteSpace / Escape / TextChar
-SoftBreak = "\\" NewLine { return ""; }
-HardBreak = NewLine { return "\n"; }
-// NB "An application should be able to deal with following linebreaks: LF, CR, LFCR, CRLF"
-NewLine = "\n" / "\r" / "\r\n" / "\n\r"
-// NB "Escaping: ... exception: whitespaces still have to be converted to space!"
-WhiteSpace = ("\\"? [ \t\r\n])+ { return " "; }
-Escape = "\\" char:. { return char; }
-// FIXME: colon only needs to be escaped in 'Compose' data type
-TextChar = [^\]\\:]
+
 Stone = Point
 Move = Point
 Point = LcLetter LcLetter
+
+// text values
+SimpleText = SimpleTextToken*
+Text = TextToken*
+SimpleTextToken = TextSoftBreak / TextWhiteSpace / TextEscape / TextChar
+TextToken = TextSoftBreak / TextHardBreak / TextWhiteSpace / TextEscape / TextChar
+TextSoftBreak = "\\" NewLine { return ""; }
+TextHardBreak = NewLine { return "\n"; }
+// NB "An application should be able to deal with following linebreaks: LF, CR, LFCR, CRLF"
+NewLine = "\n" / "\r" / "\r\n" / "\n\r"
+// NB "Escaping: ... exception: whitespaces still have to be converted to space!"
+TextWhiteSpace = ("\\"? [ \t\r\n\w])+ { return " "; }
+TextEscape = "\\" char:. { return char; }
+// FIXME: colon only needs to be escaped in 'Compose' data type
+TextChar = [^\]\\:]
+
 Digit = [0-9]
 UcLetter = [A-Z]
 LcLetter = [a-z]
+WS = [ \t\r\n\f]*
