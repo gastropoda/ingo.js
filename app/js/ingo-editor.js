@@ -1,9 +1,11 @@
 (function() {
   angular
-  .module("ingoEditor", ["goBoard", "goGameTree", "ui.bootstrap"])
+  .module("ingoEditor", ["goBoard", "goGameTree", "ui.bootstrap", "sgf"])
   .controller("BoardController",
-              ["$scope", "GoGameState", "GoGameTree",
-                function($scope, GoGameState, GoGameTree) {
+              ["$scope", "$http",
+               "GoGameState", "GoGameTree", "sgfParser",
+                function($scope, $http,
+                         GoGameState, GoGameTree, sgfParser) {
     function setCurrentNode(node) {
       if (node) {
         $scope.currentNode = node;
@@ -29,5 +31,11 @@
     $scope.prevGameState = function() {
       setCurrentNode($scope.currentNode.parent());
     };
+
+    var sgfPromise = $http.get("__go4go_20141129_Chen-Yiming_Chen-Si.sgf");
+    sgfPromise.success(function(rawSgf) {
+      var game = sgfParser.parse(rawSgf);
+      console.log(game);
+    });
   }]);
 })();
