@@ -34,7 +34,8 @@
 
     var sgfPromise = $http.get("__go4go_20141129_Chen-Yiming_Chen-Si.sgf");
     sgfPromise.success(function(rawSgf) {
-      var game = sgfParser.parse(rawSgf);
+      var sgf = sgfParser.parse(rawSgf);
+      var game = sgf.collection[0].tree;
       console.log(game);
     });
   }]);
