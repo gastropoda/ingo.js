@@ -1,10 +1,19 @@
-Collection = (WS GameTree WS)+
-GameTree = "(" WS Sequence WS GameTree* WS ")"
-Sequence = (WS Node WS)+
-Node = ";" (WS Property WS)*
-Property = PropIdent (WS PropValue WS)+
-PropIdent = UcLetter+
-PropValue = "[" CValueType "]"
+Collection = v:GameTree+ { return {collection: v}; }
+GameTree = WS "(" WS seq:Sequence WS children:GameTree* WS ")" WS {
+  return { tree: {
+    sequence: seq,
+    children: children
+    }};
+}
+Sequence = Node+
+Node = WS ";" properties:Property* WS { return {node: properties}; }
+Property = WS id:PropIdent values:PropValue+ {
+  var property = {};
+  property[id] = values.length > 1 ? values : values[0];
+  return property;
+}
+PropIdent = UcLetter+ { return text(); }
+PropValue = WS "[" value:CValueType "]" WS { return value; }
 CValueType = ValueType / Compose
 ValueType
   = Text
@@ -29,8 +38,8 @@ Move = Point
 Point = LcLetter LcLetter
 
 // text values
-SimpleText = SimpleTextToken*
-Text = TextToken*
+SimpleText = chars:SimpleTextToken* { return chars.join(""); }
+Text = chars:TextToken* { return chars.join(""); }
 SimpleTextToken = TextSoftBreak / TextWhiteSpace / TextEscape / TextChar
 TextToken = TextSoftBreak / TextHardBreak / TextWhiteSpace / TextEscape / TextChar
 TextSoftBreak = "\\" NewLine { return ""; }
@@ -46,4 +55,4 @@ TextChar = [^\]\\:]
 Digit = [0-9]
 UcLetter = [A-Z]
 LcLetter = [a-z]
-WS = [ \t\r\n\f]*
+WS = [ \t\r\n\f]* { return }
