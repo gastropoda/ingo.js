@@ -6,7 +6,17 @@ Property = PropIdent PropValue+
 PropIdent = UcLetter+
 PropValue = "[" CValueType "]"
 CValueType = ValueType / Compose
-ValueType = None / Number / Real / Double / Color / SimpleText / Text / Point / Move / Stone
+ValueType
+  = Text
+  / SimpleText
+  / Real
+  / Number
+  / Double
+  / Color
+  / Point
+  / Move
+  / Stone
+  / None
 Compose = ValueType ":" ValueType
 None = ""
 Number = [+-]? Digit+

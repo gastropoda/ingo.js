@@ -468,25 +468,25 @@ angular.module('sgf', []).factory('sgfParser', function () { return (function() 
     function peg$parseValueType() {
       var s0;
 
-      s0 = peg$parseNone();
+      s0 = peg$parseText();
       if (s0 === peg$FAILED) {
-        s0 = peg$parseNumber();
+        s0 = peg$parseSimpleText();
         if (s0 === peg$FAILED) {
           s0 = peg$parseReal();
           if (s0 === peg$FAILED) {
-            s0 = peg$parseDouble();
+            s0 = peg$parseNumber();
             if (s0 === peg$FAILED) {
-              s0 = peg$parseColor();
+              s0 = peg$parseDouble();
               if (s0 === peg$FAILED) {
-                s0 = peg$parseSimpleText();
+                s0 = peg$parseColor();
                 if (s0 === peg$FAILED) {
-                  s0 = peg$parseText();
+                  s0 = peg$parsePoint();
                   if (s0 === peg$FAILED) {
                     s0 = peg$parsePoint();
                     if (s0 === peg$FAILED) {
                       s0 = peg$parsePoint();
                       if (s0 === peg$FAILED) {
-                        s0 = peg$parsePoint();
+                        s0 = peg$parseNone();
                       }
                     }
                   }
