@@ -18,6 +18,10 @@
   function sgfColor(colorLetter) {
     return { B: "black", W: "white" }[colorLetter];
   }
+  function merge(properties) {
+    properties = [{}].concat(properties);
+    return angular.extend.apply(angular, properties);
+  }
 }
 
 
@@ -29,10 +33,12 @@ GameTree = WS "(" WS seq:Sequence WS children:GameTree* WS ")" WS {
     }};
 }
 Sequence = Node+
-Node = WS ";" properties:Property* WS { return {node: properties}; }
+Node = WS ";" properties:Property* WS { return merge(properties); }
 Property = KnownProperty / UnknownProperty
-KnownProperty =
-  MoveProperty
+KnownProperty
+  = MoveProperty
+  / ForceMoveProperty
+  / MoveNumberProperty
 
 MoveProperty =
   WS color:("B"/"W") WS "[" move:Move "]" {
@@ -40,8 +46,13 @@ MoveProperty =
       move: property(move, sgfColor(color))
     };
   }
+ForceMoveProperty = WS "KO" WS { return property("forceMove", true); }
+MoveNumberProperty = WS "MN" WS "[" moveNumber:Number "]" { return property("moveNumber", moveNumber); }
 
-UnknownProperty = WS id:PropIdent values:PropValue+ { return property(id, values); }
+UnknownProperty = WS id:PropIdent values:PropValue+ {
+  if (values.length === 1) values = values[0];
+  return property(id, values);
+}
 PropIdent = UcLetter+ { return text(); }
 PropValue = WS "[" value:CValueType "]" WS { return value; }
 CValueType = ValueType / Compose
