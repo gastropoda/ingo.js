@@ -1,8 +1,22 @@
-{
+{"a"
   function property(id, value) {
     var property = {};
     property[id] = value;
     return property;
+  }
+
+  function nextChar(charString) {
+    return String.fromCharCode(charString.charCodeAt(0) + 1);
+  }
+
+  function sgfCoordToLettter(coord) {
+    return ((coord < "i") ? coord : nextChar(coord)).toUpperCase();
+  }
+  function sgfCoordToNumber(coord) {
+    return coord.charCodeAt(0) - "a".charCodeAt(0) + 1;
+  }
+  function sgfColor(colorLetter) {
+    return { B: "black", W: "white" }[colorLetter];
   }
 }
 
@@ -16,7 +30,18 @@ GameTree = WS "(" WS seq:Sequence WS children:GameTree* WS ")" WS {
 }
 Sequence = Node+
 Node = WS ";" properties:Property* WS { return {node: properties}; }
-Property = WS id:PropIdent values:PropValue+ { return property(id, value); }
+Property = KnownProperty / UnknownProperty
+KnownProperty =
+  MoveProperty
+
+MoveProperty =
+  WS color:("B"/"W") WS "[" move:Move "]" {
+    return {
+      move: property(move, sgfColor(color))
+    };
+  }
+
+UnknownProperty = WS id:PropIdent values:PropValue+ { return property(id, values); }
 PropIdent = UcLetter+ { return text(); }
 PropValue = WS "[" value:CValueType "]" WS { return value; }
 CValueType = ValueType / Compose
@@ -40,7 +65,7 @@ Color = [BW]
 
 Stone = Point
 Move = Point
-Point = LcLetter LcLetter
+Point = i:LcLetter j:LcLetter { return sgfCoordToLettter(i) + sgfCoordToNumber(j); }
 
 // text values
 SimpleText = chars:SimpleTextToken* { return chars.join(""); }
