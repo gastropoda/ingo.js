@@ -36,7 +36,7 @@
     sgfPromise.success(function(rawSgf) {
       var sgf = sgfParser.parse(rawSgf);
       var game = sgf.collection[0].tree;
-      console.log(game);
+      console.log(JSON.stringify(game,null,2));
     });
   }]);
 })();
