@@ -1,3 +1,12 @@
+{
+  function property(id, value) {
+    var property = {};
+    property[id] = value;
+    return property;
+  }
+}
+
+
 Collection = v:GameTree+ { return {collection: v}; }
 GameTree = WS "(" WS seq:Sequence WS children:GameTree* WS ")" WS {
   return { tree: {
@@ -7,11 +16,7 @@ GameTree = WS "(" WS seq:Sequence WS children:GameTree* WS ")" WS {
 }
 Sequence = Node+
 Node = WS ";" properties:Property* WS { return {node: properties}; }
-Property = WS id:PropIdent values:PropValue+ {
-  var property = {};
-  property[id] = values.length > 1 ? values : values[0];
-  return property;
-}
+Property = WS id:PropIdent values:PropValue+ { return property(id, value); }
 PropIdent = UcLetter+ { return text(); }
 PropValue = WS "[" value:CValueType "]" WS { return value; }
 CValueType = ValueType / Compose
