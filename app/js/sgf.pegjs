@@ -39,15 +39,27 @@ KnownProperty
   = MoveProperty
   / ForceMoveProperty
   / MoveNumberProperty
+  / HandicapProperty
+  / KomiProperty
+  / EventProperty
+  / DateProperty
+  / PlayerProperty
+  / RankProperty
+  / ResultProperty
+  / SourceProperty
 
 MoveProperty =
-  WS color:("B"/"W") WS "[" move:Move "]" {
-    return {
-      move: property(move, sgfColor(color))
-    };
-  }
+  WS color:Color WS "[" move:Move "]" { return { move: property(move, color) }; }
 ForceMoveProperty = WS "KO" WS { return property("forceMove", true); }
 MoveNumberProperty = WS "MN" WS "[" moveNumber:Number "]" { return property("moveNumber", moveNumber); }
+HandicapProperty = WS "HA" WS "[" handicap:Number "]" { return property("handicap", handicap); }
+KomiProperty = WS "KM" WS "[" komi:Real "]" { return property("komi", komi); }
+EventProperty = WS "EV" WS "[" eventName:SimpleText "]" { return property("event", eventName); }
+DateProperty = WS "DT" WS "[" date:Date "]" { return property("date", date); }
+PlayerProperty = WS "P" color:Color WS "[" name:SimpleText "]" { return property(color+"Player", name); }
+RankProperty = WS color:Color "R" WS "[" rank:SimpleText "]" { return property(color+"Rank", rank); }
+ResultProperty = WS "RE" WS "[" result:Result "]" { return property("result", result); }
+SourceProperty = WS "SO" WS "[" source:SimpleText "]" { return property("source", source); }
 
 UnknownProperty = WS id:PropIdent values:PropValue+ {
   if (values.length === 1) values = values[0];
@@ -68,11 +80,18 @@ ValueType
   / Stone
   / None
 Compose = ValueType ":" ValueType
-None = ""
-Number = [+-]? Digit+
-Real = Number ("." Digit+)?
-Double = [12]
-Color = [BW]
+None = "" { return }
+Number = [+-]? Digit+ { return parseInt(text()); }
+Real = Number ("." Digit+)? { return parseFloat(text()); }
+Double = v:[12] { return parseInt(v); }
+Color = v:[BW] { return sgfColor(v); }
+Date = year:(Digit Digit Digit Digit) "-" month:(Digit Digit) "-" day:(Digit Digit) {
+  return new Date(text());
+}
+Result = Draw / WinByResignation / WinByScore / SimpleText
+Draw = "0" / "Draw" { return "draw"; }
+WinByResignation = color:Color "+" ("Resign" / "R") { return {winner: color, by: "resignation"}; }
+WinByScore = color:Color "+" score:Real { return {winner: color, by: "score", score: score}; }
 
 Stone = Point
 Move = Point
